@@ -1,0 +1,11 @@
+# For use of pip-compile command (managing this file)
+pip-tools
+
+# For vectorized array operations
+numpy
+
+# For optimization and other computational tools (can be used for ground truth)
+scipy
+
+# Testing framework
+pytest
