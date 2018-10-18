@@ -9,3 +9,9 @@ scipy
 
 # Testing framework
 pytest
+
+# Python code formatter
+black
+
+# Run black as part of the test suite
+pytest-black

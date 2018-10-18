@@ -4,14 +4,18 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+appdirs==1.4.3            # via black
 atomicwrites==1.2.1       # via pytest
-attrs==18.2.0             # via pytest
-click==7.0                # via pip-tools
+attrs==18.2.0             # via black, pytest
+black==18.6b4
+click==7.0                # via black, pip-tools
 more-itertools==4.3.0     # via pytest
 numpy==1.15.2
 pip-tools==3.1.0
 pluggy==0.8.0             # via pytest
 py==1.7.0                 # via pytest
+pytest-black==0.3.1
 pytest==3.9.1
 scipy==1.1.0
 six==1.11.0               # via more-itertools, pip-tools, pytest
+toml==0.10.0              # via black
