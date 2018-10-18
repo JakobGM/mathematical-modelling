@@ -1,0 +1,58 @@
+\documentclass[11pt,a4paper,twoside,norsk]{article}
+\usepackage{studentproject}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% Insert full name of group member(s).
+\firstgroupmember{755110}
+\secondgroupmember{759135}
+\thirdgroupmember{759144}
+
+% Add your references in BibTeX-format here. You need to run BibTeX and then pdfLaTeX before you see them in the output.
+\usepackage{filecontents}
+\begin{filecontents}{\jobname.bib}
+
+@book{Nocedal,
+    author = "J. Nocedal",
+    title = "Numerical Optimization",
+    year = 2006,
+    publisher = "Springer",
+}
+
+@book{Grasmair,
+    author = "Department of Mathematical Sciences",
+    title = "Student Project 2, TMA4180"
+    publisher = "Norwegian University of Science and Technology",
+    year = 2017, 
+    month = "March", 
+    day = 20
+}
+
+\end{filecontents}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    \input{abstract.tex}
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+\input{introduction.tex}
+    
+\section{Theory}
+\label{sec:theory}
+\input{theory.tex}
+
+\section{Numerical experiments}
+\label{sec:numexp}
+\input{numexp.tex}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\input{conclusion.tex}
+
+\bibliographystyle{siam}
+\bibliography{\jobname} 
+\end{document}

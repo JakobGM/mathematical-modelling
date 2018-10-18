@@ -1,0 +1,284 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{probset_style}
+
+\usepackage[norsk,english]{babel}
+\PassOptionsToPackage{T1}{fontenc}
+        \RequirePackage{fontenc}
+\PassOptionsToPackage{utf8}{inputenc}
+        \RequirePackage{inputenc}       
+\RequirePackage{microtype}
+\RequirePackage{csquotes}
+\RequirePackage{textcase}
+\usepackage[bitstream-charter]{mathdesign}
+\DeclareMathSizes{10}{10}{8.5}{7.5}
+\RequirePackage[hmargin=2.5cm,vmargin=3cm,twoside,bindingoffset=0cm]{geometry}
+\PassOptionsToPackage{onehalfspacing,nodisplayskipstretch}{setspace}
+\RequirePackage{setspace}
+\RequirePackage{multicol}
+\columnsep=18pt
+\RequirePackage{lastpage}
+
+\PassOptionsToPackage{usenames,dvipsnames}{xcolor}
+\RequirePackage{xcolor}
+\colorlet{thesismain}{Maroon}
+\colorlet{thesistitle}{thesismain}
+\colorlet{thesistitlelines}{thesismain}
+\colorlet{thesisheaderfooter}{thesismain} 
+\colorlet{thesischapterlines}{thesismain}
+\colorlet{thesischaptertitle}{thesismain!50!black}
+\colorlet{thesischapternumber}{thesismain!80!black}
+\colorlet{thesissectionlines}{thesismain}
+\colorlet{thesissectiontitle}{thesismain!50!black}
+\colorlet{thesismath}{thesismain}
+\colorlet{thesisfigureslines}{thesismain}
+\colorlet{thesisfigures}{thesismain!50!black}
+\colorlet{thesisother}{thesismain}
+\colorlet{thesisemph}{thesismain}
+\colorlet{thesisrule}{thesismain}
+
+%\RequirePackage{tikz}
+%\RequirePackage{pgfplots}
+%\RequirePackage{pgfplotstable}
+%\usepgfplotslibrary{external} 
+%\pgfplotsset{compat=1.3}
+%\usetikzlibrary{external}
+%\tikzexternalize[shell escape=-enable-write18, prefix=gfx/ext/]
+%\newlength\figureheight 
+%\newlength\figurewidth
+%
+%\newsavebox{\measuredSize}
+%\newcommand{\resizeToWidth}[2]{%
+%    \pgfmathsetmacro{\pgfplotswidth}{#2}%
+%    \begin{lrbox}{\measuredSize}#1\end{lrbox}%
+%    \pgfmathsetmacro{\pgfplotswidth}{2*\pgfplotswidth-\wd\measuredSize}%
+%    #1%
+%}
+%\pgfplotsset{
+%  tick label style = {font=\small},
+%  every axis label = {font=\small},
+%  legend style = {font=\small},
+%  label style = {font=\small},
+%  colormap={thesiscolormap}{color=(thesismain) color=(white)}
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Style: Title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\course}[1]{\def\course{#1}}
+\newcommand{\firstgroupmember}[1]{\def\firstgroupmember{#1}}
+\newcommand{\secondgroupmember}[1]{\def\secondgroupmember{#1}}
+\newcommand{\thirdgroupmember}[1]{\def\thirdgroupmember{#1}}
+
+\def\logofil{ntnulogosort}
+\def\Vhrulefill{\leavevmode\leaders\hrule height 0.7ex depth \dimexpr0.4pt-0.7ex\hfill\kern0pt}
+\usepackage{titling}
+\usepackage{etoolbox}
+\course{TMA4195 Mathematical Modelling}
+\title{Student Project}
+\date{Autumn 2018}
+\makeatletter
+    \def\@maketitle{%
+  \newpage
+  \null%
+  \vspace{-3em}
+  \begin{center}%
+      \noindent\textcolor{thesismain}{\Vhrulefill}\par\vspace{.5em}%
+      \begin{minipage}[t]{.25\textwidth}
+\begin{center}
+      \includegraphics[width=1.4cm]{\logofil}\par
+ \LARGE NTNU
+\end{center}%
+\end{minipage}%
+      \begin{minipage}[t]{.75\textwidth}\vspace{-3.5em}%
+   {\small \course{ }\@ --- \@date\par}%
+    {\LARGE \scshape\@title\par}\vspace{.5em}%
+{\itshape Group member\ifdefempty{\secondgroupmember}{}{s}:}\vspace{-.5em}
+\begin{itemize}[leftmargin=0cm,itemindent=.5cm,labelwidth=\itemindent,labelsep=0cm,align=left,itemsep=0pt]
+\item\firstgroupmember%
+\ifdefempty{\secondgroupmember}{}{\item\secondgroupmember}%
+\ifdefempty{\thirdgroupmember}{}{\item\thirdgroupmember}%
+\end{itemize}%
+    \end{minipage}\par\vspace{.7em}%
+ \noindent\textcolor{thesismain}{\Vhrulefill}%
+\par\vspace{1em}
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Style: Sections and header/footer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\PassOptionsToPackage{explicit,pagestyles}{titlesec}
+\RequirePackage{titlesec}
+
+\titleformat{\section}
+{\color{Black}\bfseries\large\scshape\filcenter}
+{}{0pt}{\textcolor{thesissectionlines}{\noindent\Vhrulefill}\hspace{1em}\hspace{0.5em}#1\hspace{1em}\textcolor{thesissectionlines}{\Vhrulefill}}
+\titlespacing*{\section}
+{0em}{2em}{0.5em}
+
+\usepackage{fancyhdr}
+ \pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,LO]{\footnotesize \course}
+\fancyhead[CE,CO]{\footnotesize Student Project}
+\fancyhead[RE,RO]{\footnotesize Page~\thepage~of~\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyhf{}%
+  \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref{LastPage}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Style: Figures, tables & captions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{graphicx}
+\PassOptionsToPackage{}{}
+\RequirePackage[font=small,labelfont={color=thesisfigures,bf}]{caption}
+\RequirePackage{subcaption}
+\RequirePackage{booktabs}
+\RequirePackage{multirow}
+\renewcommand{\heavyrulewidth}{1.1pt}
+\RequirePackage{colortbl}
+\arrayrulecolor{thesisfigureslines}
+\RequirePackage{siunitx}
+\RequirePackage{wrapfig}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Autoreferences
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\PassOptionsToPackage{pdftex,hyperfootnotes=false,pdfpagelabels}{hyperref}
+\RequirePackage{hyperref}
+
+\hypersetup{%
+    %draft,     % = no hyperlinking at all (useful in b/w printouts)
+    colorlinks=true, linktocpage=false, pdfstartpage=1, pdfstartview=FitV,%
+    % uncomment the following line if you want to have black links (e.g., for printing)
+    %colorlinks=false, linktocpage=false, pdfborder={0 0 0}, pdfstartpage=3, pdfstartview=FitV,% 
+    breaklinks=true, pdfpagemode=UseNone, pageanchor=true, pdfpagemode=UseOutlines,%
+    plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
+    hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
+    urlcolor=thesisother,
+    linkcolor=thesisother,
+    citecolor=thesisother, %pagecolor=RoyalBlue,%
+    %urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
+}
+
+\makeatletter
+\@ifpackageloaded{babel}%
+    {%
+       \addto\extrasenglish{%
+                                        \renewcommand*{\figureautorefname}{Figure}%
+                                        \renewcommand*{\tableautorefname}{Table}%
+                                        \renewcommand*{\partautorefname}{Part}%
+                                        \renewcommand*{\chapterautorefname}{Chapter}%
+                                        \renewcommand*{\sectionautorefname}{Section}%
+                                        \renewcommand*{\subsectionautorefname}{Section}%
+                                        \renewcommand*{\subsubsectionautorefname}{Section}%
+                                        \renewcommand*{\theoremautorefname}{Theorem}%                                   
+                                        \providecommand*{\propositionautorefname}{Proposition}%
+                                        \providecommand*{\lemmaautorefname}{Lemma}%
+                                        \providecommand{\corollaryautorefname}{Corollary}%
+                                        \providecommand{\exampleautorefname}{Example}%
+                                        \providecommand{\definitionautorefname}{Definition}%
+                                        \providecommand{\remarkautorefname}{Remark}%
+                                        \providecommand{\observationautorefname}{Observation}%
+                                        \providecommand{\conventionautorefname}{Convention}%
+                                        \providecommand{\conjectureautorefname}{Conjecture}%
+                                }%
+                        \providecommand{\subfigureautorefname}{\figureautorefname}%  
+                        \providecommand{\assumptionautorefname}{Assumption}%            
+    }{\relax}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mathematics: Theorems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{fixmath}
+\usepackage{xfrac,cases,latexsym,upgreek}
+
+\newtheoremstyle{ex}% <name>
+{10pt}% <Space above>
+{10pt}% <Space below>
+{}% <Body font>
+{}% <Indent amount>
+{\color{thesismain}}% <Theorem head font>
+{}% <Punctuation after theorem head>
+{.5em}% <Space after theorem headi>
+{\fbox{\color{black}\thmnumber{#2}} \thmnote{\color{thesismain}\hspace{1pt} #3.}}%
+\theoremstyle{ex}
+\newtheorem{answer}[section]{Answer}
+
+\newtheoremstyle{sol}% <name>
+{5pt}% <Space above>
+{0pt}% <Space below>
+{\setlist[enumerate,1]{label=\color{NavyBlue}\alph*)}}% <Body font>
+{}% <Indent amount>
+{}% <Theorem head font>
+{}% <Punctuation after theorem head>
+{.5em}% <Space after theorem headi>
+{\textcolor{MidnightBlue}{\textit{Solution.}}}% <Theorem head spec (can be left empty, meaning `normal')>
+\theoremstyle{sol}
+\newtheorem*{solution}{Solution}
+
+% Colored equation numbering.
+\makeatletter
+\def\tagform@#1{\maketag@@@{(\textcolor{thesismain}{\ignorespaces#1\unskip\@@italiccorr})}}
+\makeatother
+
+% Raise subcripts
+\makeatletter
+\newcommand{\raisemath}[1]{\mathpalette{\raisem@th{#1}}}
+\newcommand{\raisem@th}[3]{\raisebox{#1}{$#2#3$}}
+\makeatother
+
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+\DeclareMathOperator{\trace}{tr}
+\renewcommand{\vec}[1]{\boldsymbol{\mathit{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Style: Enumeration, itemization
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{enumitem}
+\setenumerate{listparindent=0\parindent,label=\color{thesisother}\alph*),leftmargin=*}
+\renewcommand{\labelenumi}{\color{thesisother}\alph{enumi})}
+\renewcommand{\labelitemi}{\color{thesisother}${\star}$}
+\renewcommand{\labelitemii}{\color{thesisother}${\diamond}$}
+\renewcommand{\labelitemiii}{\color{thesisother}${\circle}$}
+\renewcommand{\labelitemiv}{\color{thesisother}${\ast}$}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Style: Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{url}
+\makeatletter
+\renewcommand*{\@biblabel}[1]{\hfill [\textcolor{thesisother}{#1}]}
+\makeatother
+%\renewcommand{\refname}{References}
+\addto\captionsenglish{\renewcommand{\bibname}{References}}
+
+\newlength{\currentparskip}
+\newlength{\currentparindent}
+\newenvironment{minipageparskip}
+  {\setlength{\currentparskip}{\parskip}% save the value
+   \setlength{\currentparindent}{\parindent}% save the value
+   \begin{minipage}{\linewidth}% open the minipage
+   \setlength{\parskip}{\currentparskip}% restore the value
+   \setlength{\parindent}{\currentparindent}% restore the value
+  }
+  {\end{minipage}}
