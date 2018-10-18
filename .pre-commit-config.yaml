@@ -4,3 +4,12 @@ repos:
     hooks:
     - id: black
       language_version: python3.7
+-   repo: local
+    hooks:
+    -   id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
+        # Only run when python files change
+        types: [python]
