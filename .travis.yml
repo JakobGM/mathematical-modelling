@@ -1,0 +1,15 @@
+# Install basic python dependencies
+language: python
+
+# These are required for python3.7
+sudo: required
+dist: xenial
+python: "3.7"
+
+# Install project dependencies
+install:
+  - pip install -r requirements.txt
+
+script:
+  # Execute the pytest test suite with verbosity
+  - pytest . -vv
