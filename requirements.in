@@ -24,3 +24,15 @@ mypy
 
 # For invocation of mypy as part of pytest
 pytest-mypy
+
+# Python linting
+flake8
+flake8-bugbear
+flake8-comprehensions
+flake8-import-order
+flake8-quotes
+flake8-tidy-imports
+pep8-naming
+
+# Run flake8 as part of the test suite
+pytest-flake8
