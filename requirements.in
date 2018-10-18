@@ -18,3 +18,9 @@ pytest-black
 
 # For pre-commit hooks
 pre-commit
+
+# For static type analysis
+mypy
+
+# For invocation of mypy as part of pytest
+pytest-mypy
