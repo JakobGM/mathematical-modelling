@@ -1,0 +1,23 @@
+We now look at the conservation of mass within the glacier, under the assumption that the glacial ice has constant density $\rho$.
+
+The Eulerian formulation of the law of conservation of mass is given by
+
+\begin{equation}
+  \eval{\od{}{t} \int_{R_0} \rho(x, t) \dif{x}}_{t = t_0} + \int_{\partial R_0} \rho(x, t_0) (\vec{w}^* \cdot \vec{n}) \dif{\sigma} = \int_{R_0} q(x, t_0) \dif{x}
+\end{equation}
+
+Where $R_0$ is a given domain and $\partial R_0$ its boundary. $\vec{n}$ is the outer unit normal vector of the domain boundary surface, and $q$ the matter production within the domain.
+
+\textcolor{red}{Which smoothness assumptions are we making in the following derivation?}
+
+The differential form of this equation is
+
+\begin{equation}
+  \pd{}{t} \rho + \nabla \cdot (\rho \cdot \vec{w}^*) = q.
+\end{equation}
+
+Now we assume constant density $\rho$, resulting in $\pd{\rho}{t} = 0$ and $\nabla \cdot (\rho \cdot \vec{w}^*) = \rho \nabla \cdot \vec{w}^*$. We also assume to production of matter, $q = 0$ \textcolor{red}{(We have not been given this assumption! Is it correct?)}, resulting in the following conclusion
+
+\begin{equation}
+  \nabla \cdot \vec{w}^* = 0.
+\end{equation}
