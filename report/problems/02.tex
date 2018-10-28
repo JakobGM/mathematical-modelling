@@ -1,1 +1,67 @@
-Answer placeholder.
+Conservation of momentum and Newton's second law of motion implies that the velocity of the glacier must satisfy
+
+\begin{equation} \label{eq:momentum-conservation}
+  \begin{cases}
+    &\rho \partial_{t^*} u^* + \rho \nabla \red{(}u^* \cdot \vec{w}^*\red{)} = -\partial_{x^*} p^* + \nabla \cdot \tau_x^* + f_x, \\
+    &\rho \partial_{t^*} u^* + \rho \nabla \red{(} u^* \cdot \vec{w}^*\red{)} = -\partial_{z^*} p^* + \nabla \cdot \tau_z^* + f_z,
+  \end{cases}
+\end{equation}
+
+\red{We should convince ourselves that those red parens should not be there!}
+
+Here, $f = (f_x, f_y)$ denotes the body forces on each point, $p^*$ the pressure, and
+
+\begin{equation}
+  \tau^* = \begin{bmatrix} \tau_x^* \\ \tau_z^* \end{bmatrix} = \begin{bmatrix} \tau_{xx}^* & \tau_{xz}^* \\ \tau_{zx}^* & \tau_{zz}^* \end{bmatrix}
+\end{equation}
+
+the stress tensor in two dimensions. The pressure $p^*$ can be written as a sum
+
+\begin{equation} \label{eq:pressure}
+  p^*(x^*, z^*, t^*) = \rho g \cos(\alpha) \cdot (h^*(x^*, t^*) - z^*) + \tilde{p}^*(x^*, z^*, t^*)
+\end{equation}
+
+with $g$ being the gravitational acceleration at the surface of the earth ($\approx \SI{9.8}{\meter\per\square\second}$). The first term in \eqref{eq:pressure} is the hydrostatic pressure within the glacier, and the second term is the counterpressure induced by the constant density $\rho$.
+
+We will now model the body forces within the glacier \red{(what does "model" entail exactly here?)}. First observe that the two first terms of the left hand side of equation \eqref{eq:momentum-conservation} are the time and space derivatives of momentum.
+We can make a simplification by assuming that gravity and friction changes are much greater than momentum and pressure changes, resulting in a steady state. This two terms can therefore be approximated to $0$, simplifying equation \eqref{eq:momentum-conservation} to \red{Is this correct? Pressure should probably not be neglected...}
+
+\begin{equation} \label{eq:steady-state}
+  \begin{cases}
+    &-\partial_{x^*} p^* + \nabla \cdot \tau_x^* + f_x = 0, \\
+    &-\partial_{z^*} p^* + \nabla \cdot \tau_z^* + f_z = 0,
+  \end{cases}
+\end{equation}
+
+The pointwise gravitational force $\vec{f_g}$ is given by
+
+\begin{equation}
+  \vec{f_g} = \begin{bmatrix} f_{gx} \\ f_{gz} \end{bmatrix} = \begin{bmatrix} \rho g \sin(\alpha) \\ \rho g \cos(\alpha) \end{bmatrix}.
+\end{equation}
+
+Under the assumption that the dominating body force is $f_g$ \red{(again, this needs to be argued for better)}, equation \eqref{eq:steady-state} becomes:
+
+\begin{equation} \label{eq:steady-state}
+  \begin{cases}
+    &-\partial_{x^*} p^* + \nabla \cdot \tau_x^* + \rho g \sin(\alpha) = 0, \\
+    &-\partial_{z^*} p^* + \nabla \cdot \tau_z^* + \rho g \cos(\alpha) = 0,
+  \end{cases}
+\end{equation}
+
+The space derivatives of the pressure sum given in equation \eqref{eq:pressure} can be calculated as
+
+\begin{equation} \label{eq:pressure-space-derivative}
+  \begin{align}
+  \partial_{x^*} p^* &= \rho g \cos(\alpha) \cdot \partial_{x^*} h^* + \partial_{x^*} \tilde{p}^*, \\
+  \partial_{z^*} p^* &= - \rho g \cos(\alpha) + \partial_{z^*} \tilde{p}^*.
+  \end{align}
+\end{equation}
+
+Inserting these results into equation \eqref{eq:steady-state} yields
+
+\begin{equation} \label{eq:steady-state}
+  \begin{align}
+    \nabla \cdot \tau_x^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
+    \nabla \cdot \tau_z^* - \partial_{z^*} \tilde{p}^* &= 0,
+  \end{align}
+\end{equation}

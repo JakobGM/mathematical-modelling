@@ -1,8 +1,14 @@
 \documentclass[11pt,a4paper,twoside,norsk]{article}
 \usepackage{studentproject}
 \usepackage{commath} % Gives access to differential operatior with \dif
+\usepackage{siunitx} % For SI unit specifications, nicely formatted
 
-\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+% --- Commands ---
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% --- Configuration ---
+% Use Norwegian style SI units, division instead of powers
+\sisetup{per-mode = symbol}
 
 % Insert full name of group member(s).
 \firstgroupmember{755110}
