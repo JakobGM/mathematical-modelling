@@ -1,1 +1,17 @@
-Answer placeholder.
+We will now develop a model for the stress tensor $\tau^*$. We will make the (common) assumption that the stress tensor is is related to the strain rate by the following relations (\textit{Glen's law}):
+
+\begin{equation}
+  \begin{align}
+    \partial_{x^*} u^* &= \mu(\theta^*)^{m-1} \tau_{xx}^*, \\
+    \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \\
+    \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^* = \mu(\theta^*)^{m-1} \tau_{zx}^*
+  \end{align}
+\end{equation}
+
+Here,
+
+\begin{equation}
+  \theta^* := \left( \frac{1}{2} {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 + \frac{1}{2} {\tau_{zz}^*}^2 \right) ^{1/2},
+\end{equation}
+
+where $\mu$ and $m$ are material constants depending on, amongst others, the temperature of the ice. Common values for the exponent $m$ lie between $m = 1.8$ and $m = 5$, with $m = 3$ being a typical choice.
