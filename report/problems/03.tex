@@ -1,17 +1,87 @@
 We will now develop a model for the stress tensor $\tau^*$. We will make the (common) assumption that the stress tensor is is related to the strain rate by the following relations (\textit{Glen's law}):
-
-\begin{equation}
+%
+\begin{equation*}
   \begin{align}
     \partial_{x^*} u^* &= \mu(\theta^*)^{m-1} \tau_{xx}^*, \\
     \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \\
-    \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^* = \mu(\theta^*)^{m-1} \tau_{zx}^*
+    \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^* = \mu(\theta^*)^{m-1} \tau_{zx}^*.
+  \end{align}
+\end{equation}
+%
+Here,
+
+\begin{equation} \label{eq:theta}
+  \theta^* := \left( \frac{1}{2} {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 + \frac{1}{2} {\tau_{zz}^*}^2 \right) ^{1/2},
+\end{equation}
+%
+where $\mu$ and $m$ are material constants depending on, amongst others, the temperature of the ice. Common values for the exponent $m$ lie between $m = 1.8$ and $m = 5$, with $m = 3$ being a typical choice.
+
+Conservation of angular momentum implies that the stress tensor is symmetric, i.e. 
+%
+\begin{equation} \label{eq:non-rotational-tensor}
+  \tau_{xz} = \tau_{zx}.
+\end{equation}
+%
+Additionaly, since compression is induced by the trace of the stress tensor, we get
+%
+\begin{equation} \label{eq:incompressible-tensor}
+  \begin{aligned}
+    \Tr(\tau) &= \tau_{xx} + \tau_{zz} = 0 \\
+    \implies \tau_{zz} &= -\tau_{xx},
+  \end{aligned}
+\end{equation}
+%
+under the assumption of incompressibility. Inserting this into equation \eqref{eq:theta} yields:
+%
+\begin{equation*}
+  \theta^* := \left( {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 \right) ^{1/2}.
+\end{equation}
+%
+Write the stress divergence as
+%
+\begin{equation}
+  \begin{align}
+    \nabla \cdot \tau_x^* &= \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^*, \\
+    \nabla \cdot \tau_z^* &= \partial_{x^*} \tau_{zx}^* + \partial_{z^*} \tau_{zz}^*,
+  \end{align}
+\end{equation}
+%
+and insert relationship \eqref{eq:non-rotational-tensor} and \eqref{eq:incompressible-tensor} into this formulation, resulting in
+%
+\begin{equation} \label{eq:stress-divergence}
+  \begin{align}
+    \nabla \cdot \tau_x^* &= \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^*, \\
+    \nabla \cdot \tau_z^* &= \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^*.
+  \end{align}
+\end{equation}
+%
+Now, insert equation \eqref{eq:stress-divergence} into equation \eqref{eq:steady-state-explicit}, yielding
+%
+\begin{equation}
+  \begin{align}
+    \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
+    \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0.
+  \end{align}
+\end{equation}
+%
+Finally, we rewrite the velocity divergence \eqref{eq:velocity-divergence} as
+%
+\begin{equation*}
+  \nabla \cdot \vec{w}^* = \partial_{x^*} u^* + \partial_{z^*} v^* = 0.
+\end{equation}
+%
+After all these simplifications, we end up with the following equation set for the interior of the glacier
+%
+\begin{equation} \label{eq:conservation-of-momentum}
+  \begin{align}
+    \nabla \cdot \vec{w}^* = \partial_{x^*} u^* + \partial_{z^*} v^* &= 0, \\
+    \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
+    \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0, \\
+    \partial_{x^*} u^* &= \mu(\theta^*)^{m-1} \tau_{xx}^*, \\
+    \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \text{\red{~~Why is this not included?}}\\
+    \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^*, \\
+    \theta^* &= \left( {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 \right) ^{1/2},
   \end{align}
 \end{equation}
 
-Here,
-
-\begin{equation}
-  \theta^* := \left( \frac{1}{2} {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 + \frac{1}{2} {\tau_{zz}^*}^2 \right) ^{1/2},
-\end{equation}
-
-where $\mu$ and $m$ are material constants depending on, amongst others, the temperature of the ice. Common values for the exponent $m$ lie between $m = 1.8$ and $m = 5$, with $m = 3$ being a typical choice.
+with unknowns $u^*$, $v^*$, $h^*$, $\tilde{p}^*$, $\tau_{xx}^*$, and $\theta^*$.
