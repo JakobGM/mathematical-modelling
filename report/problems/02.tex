@@ -26,7 +26,7 @@ with $g$ being the gravitational acceleration at the surface of the earth ($\app
 We will now model the body forces within the glacier \red{(what does "model" entail exactly here?)}. First observe that the two first terms of the left hand side of equation \eqref{eq:momentum-conservation} are the time and space derivatives of momentum.
 We can make a simplification by assuming that gravity and friction changes are much greater than momentum and pressure changes, resulting in a steady state. This two terms can therefore be approximated to $0$, simplifying equation \eqref{eq:momentum-conservation} to \red{Is this correct? Pressure should probably not be neglected...}
 
-\begin{equation} \label{eq:steady-state}
+\begin{equation} \label{eq:steady-state-unknown-force}
   \begin{cases}
     &-\partial_{x^*} p^* + \nabla \cdot \tau_x^* + f_x = 0, \\
     &-\partial_{z^*} p^* + \nabla \cdot \tau_z^* + f_z = 0,
@@ -39,9 +39,9 @@ The pointwise gravitational force $\vec{f_g}$ is given by
   \vec{f_g} = \begin{bmatrix} f_{gx} \\ f_{gz} \end{bmatrix} = \begin{bmatrix} \rho g \sin(\alpha) \\ \rho g \cos(\alpha) \end{bmatrix}.
 \end{equation}
 
-Under the assumption that the dominating body force is $f_g$ \red{(again, this needs to be argued for better)}, equation \eqref{eq:steady-state} becomes:
+Under the assumption that the dominating body force is $f_g$ \red{(again, this needs to be argued for better)}, equation \eqref{eq:steady-state-unknown-force} becomes:
 
-\begin{equation} \label{eq:steady-state}
+\begin{equation} \label{eq:steady-state-implicit}
   \begin{cases}
     &-\partial_{x^*} p^* + \nabla \cdot \tau_x^* + \rho g \sin(\alpha) = 0, \\
     &-\partial_{z^*} p^* + \nabla \cdot \tau_z^* + \rho g \cos(\alpha) = 0,
@@ -57,9 +57,9 @@ The space derivatives of the pressure sum given in equation \eqref{eq:pressure} 
   \end{align}
 \end{equation}
 
-Inserting these results into equation \eqref{eq:steady-state} yields
+Inserting these results into equation \eqref{eq:steady-state-implicit} yields
 
-\begin{equation} \label{eq:steady-state}
+\begin{equation} \label{eq:steady-state-explicit}
   \begin{align}
     \nabla \cdot \tau_x^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
     \nabla \cdot \tau_z^* - \partial_{z^*} \tilde{p}^* &= 0,
