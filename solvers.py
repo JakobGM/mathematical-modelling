@@ -67,11 +67,9 @@ class GlacierParameters:
 
 
 class FiniteVolumeSolver:
-    def __init__(
-        self, initial_height: np.ndarray, x_coordinates: np.ndarray
-    ) -> None:
-        self.initial_height = initial_height
-        self.x_coordinates = x_coordinates
+    def __init__(self, glacier: GlacierParameters) -> None:
+        self.initial_height = glacier.h_0
+        self.x_coordinates = glacier.xs
 
     def solve(self) -> None:
         pass
