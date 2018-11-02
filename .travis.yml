@@ -15,6 +15,9 @@ branches:
 install:
   - pip install -r requirements.txt
 
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+
 script:
   # Execute the pytest test suite with verbosity
   - pytest . -vv
