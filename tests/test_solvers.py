@@ -12,7 +12,7 @@ def finite_volume_solver() -> FiniteVolumeSolver:
     """Return instance of FiniteVolumeSolver."""
     initial_height = np.linspace(start=2, stop=0, num=11)
     x_coordinates = np.linspace(start=0, stop=10, num=11)
-    accumulation = np.array([2, 2, 2, 2, 1, 0, -1, -2, 0, 0])
+    accumulation = np.array([2, 2, 2, 2, 1, 0, -1, -2, 0, 0, 0])
     glacier = GlacierParameters(
         h_0=initial_height,
         xs=x_coordinates,

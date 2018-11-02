@@ -38,6 +38,11 @@ class GlacierParameters:
 
     def __post_init__(self) -> None:
         """Calculate derived constants."""
+        same_shape = self.q.shape == self.h_0.shape == self.xs.shape
+        vector_shape = self.q.ndim == 1
+        if not (same_shape and vector_shape):
+            raise ValueError('h_0, xs, and q must be vectors of same shape.')
+
         # Max height of glacier
         self.H: float = self.h_0.max()
 
