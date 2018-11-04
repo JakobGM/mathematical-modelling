@@ -49,7 +49,7 @@ class GlacierParameters:
         self.epsilon: float = self.H / self.L
 
         # Maximum accumulation rate
-        self.Q = self.q.max()
+        self.Q = np.abs(self.q).max()
 
         # Stress scaler
         self.theta = self.rho * self.g * self.H * np.sin(self.alpha)
