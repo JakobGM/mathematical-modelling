@@ -37,6 +37,8 @@ def test_glacier_parameters():
         xs=x_coordinates,
         alpha=np.radians(3),
         q=accumulation_rate,
+        H=3.0,
+        L=400.0,
     )
     assert params.g == 9.8
     assert params.rho == 917

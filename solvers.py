@@ -1,10 +1,11 @@
-"""Numerical solvers made specifically for glacier dynamics. """
-
 from dataclasses import dataclass
+from typing import Optional, Union
 
 import matplotlib.pyplot as plt
 
 import numpy as np
+
+from scipy import integrate
 
 
 @dataclass
@@ -12,7 +13,7 @@ class GlacierParameters:
     """Dataclass containing relevant information regarding a glacier."""
 
     # Initial height profile of glacier
-    h_0: np.ndarray
+    h_0: Union[float, np.ndarray]
 
     # And respective x-coordinates
     xs: np.ndarray
@@ -22,6 +23,12 @@ class GlacierParameters:
 
     # Slope of valley floor in radians
     alpha: float
+
+    # Length scaling for glacier in meters
+    L: float = 1000.0
+
+    # Height scaling for glacier in meters
+    H: float = 50.0
 
     # Gravitational acceleration in m/s^2
     g: float = 9.8
@@ -38,18 +45,6 @@ class GlacierParameters:
 
     def __post_init__(self) -> None:
         """Calculate derived constants."""
-        same_shape = self.q.shape == self.h_0.shape == self.xs.shape
-        vector_shape = self.q.ndim == 1
-        if not (same_shape and vector_shape):
-            raise ValueError('h_0, xs, and q must be vectors of same shape.')
-
-        # Max height of glacier
-        self.H: float = self.h_0.max()
-
-        # Length of glacier
-        # Assuming h > 0 for all x < x_F
-        self.L: float = self.xs[self.h_0 > 0][-1]
-
         # Approximated to be a small parameter
         self.epsilon: float = self.H / self.L
 
@@ -69,6 +64,16 @@ class GlacierParameters:
             / self.Q
         )
         self.lambda_ = self.kappa / (self.m + 2)
+
+        if isinstance(self.h_0, (int, float)):
+            self.h_0 = self.generate_steady_state_height(h_0=self.h_0, q=self.q)
+
+    def generate_steady_state_height(
+        self, h_0: float, q: np.ndarray
+    ) -> np.ndarray:
+        """Return height profile resulting in steady state, given q."""
+        integrated_q = integrate.cumtrapz(y=self.q, x=self.xs)
+        return (integrated_q / self.lambda_) ** (1 / (self.m + 2))
 
 
 class FiniteVolumeSolver:
