@@ -66,14 +66,13 @@ class GlacierParameters:
         self.lambda_ = self.kappa / (self.m + 2)
 
         if isinstance(self.h_0, (int, float)):
-            self.h_0 = self.generate_steady_state_height(h_0=self.h_0, q=self.q)
+            self.h_0 = self.generate_steady_state_height(h_0=self.h_0)
 
-    def generate_steady_state_height(
-        self, h_0: float, q: np.ndarray
-    ) -> np.ndarray:
+    def generate_steady_state_height(self, h_0: float) -> np.ndarray:
         """Return height profile resulting in steady state, given q."""
+        assert isinstance(h_0, (float, int))
         integrated_q = integrate.cumtrapz(y=self.q, x=self.xs)
-        return (integrated_q / self.lambda_) ** (1 / (self.m + 2))
+        return (integrated_q / self.lambda_) ** (1 / (self.m + 2)) + h_0
 
 
 class FiniteVolumeSolver:
