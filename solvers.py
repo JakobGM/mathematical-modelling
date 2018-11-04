@@ -72,7 +72,8 @@ class GlacierParameters:
         """Return height profile resulting in steady state, given q."""
         assert isinstance(h_0, (float, int))
         integrated_q = integrate.cumtrapz(y=self.q, x=self.xs)
-        return (integrated_q / self.lambda_) ** (1 / (self.m + 2)) + h_0
+        height = (integrated_q / self.lambda_) ** (1 / (self.m + 2)) + h_0
+        return np.insert(height, 0, h_0)
 
 
 class FiniteVolumeSolver:
