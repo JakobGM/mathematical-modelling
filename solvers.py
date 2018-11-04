@@ -71,7 +71,8 @@ class GlacierParameters:
     def generate_steady_state_height(self, h_0: float) -> np.ndarray:
         """Return height profile resulting in steady state, given q."""
         assert isinstance(h_0, (float, int))
-        integrated_q = integrate.cumtrapz(y=self.q, x=self.xs, initial=0)
+        xs = self.xs / self.L
+        integrated_q = integrate.cumtrapz(y=self.q, x=xs, initial=0)
         integral_constant = self.lambda_ * h_0 ** (self.m + 2)
         integrated_q += integral_constant
         integrated_q[integrated_q < 0.0] = 0.0
