@@ -72,7 +72,8 @@ class GlacierParameters:
         """Return height profile resulting in steady state, given q."""
         assert isinstance(h_0, (float, int))
         xs = self.xs / self.L
-        integrated_q = integrate.cumtrapz(y=self.q, x=xs, initial=0)
+        q = self.q / self.Q
+        integrated_q = integrate.cumtrapz(y=q, x=xs, initial=0)
         integral_constant = self.lambda_ * h_0 ** (self.m + 2)
         integrated_q += integral_constant
         integrated_q[integrated_q < 0.0] = 0.0
