@@ -1,11 +1,17 @@
+from collections import namedtuple
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
 
 import numpy as np
 
 from scipy import integrate
+
+
+PhysicalVariable = namedtuple(
+    'PhysicalVariable', field_names=('unscaled', 'scaled')
+)
 
 
 @dataclass
@@ -50,6 +56,11 @@ class GlacierParameters:
 
         # Maximum accumulation rate
         self.Q = np.abs(self.q).max()
+        self.q = PhysicalVariable(unscaled=self.q, scaled=self.q / self.Q)
+
+        # Scale other variables
+        self.h_0 = PhysicalVariable(unscaled=self.h_0, scaled=self.h_0 / self.H)
+        self.xs = PhysicalVariable(unscaled=self.xs, scaled=self.xs / self.L)
 
         # Stress scaler
         self.theta = self.rho * self.g * self.H * np.sin(self.alpha)
@@ -71,8 +82,8 @@ class GlacierParameters:
     def generate_steady_state_height(self, h_0: float) -> np.ndarray:
         """Return height profile resulting in steady state, given q."""
         assert isinstance(h_0, (float, int))
-        xs = self.xs / self.L
-        q = self.q / self.Q
+        xs = self.xs.scaled
+        q = self.q.scaled
         integrated_q = integrate.cumtrapz(y=q, x=xs, initial=0)
         integral_constant = self.lambda_ * h_0 ** (self.m + 2)
         integrated_q += integral_constant
@@ -81,12 +92,49 @@ class GlacierParameters:
 
 
 class FiniteVolumeSolver:
-    def __init__(self, glacier: GlacierParameters) -> None:
-        self.initial_height = glacier.h_0
-        self.x_coordinates = glacier.xs
+    # A very naive CFL condition, not analytically found at all
+    CFL: float = 0.1
 
-    def solve(self) -> None:
-        pass
+    def __init__(self, glacier: GlacierParameters) -> None:
+        self.glacier = glacier
+
+    def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
+        # Scale x coordinates
+        xs = self.glacier.xs.scaled
+
+        # Scale height coordinates
+        h_0 = self.glacier.h_0.scaled
+
+        # Spatial step used
+        delta_x = xs[1] - xs[0]
+
+        # Determine temporal time step
+        delta_t = delta_t or self.CFL * delta_x
+
+        num_t = int(t_end / delta_t)
+        num_x = len(xs)
+
+        h = np.zeros([num_t, num_x], dtype=float)
+        h[:, 0] = h_0[0]
+        h[0, :] = h_0
+
+        lambda_ = self.glacier.lambda_
+        q = self.glacier.q.scaled
+        m = self.glacier.m
+
+        from tqdm import tqdm
+
+        for j in tqdm(np.arange(start=0, stop=num_t - 1)):
+            flux_difference = lambda_ * (
+                h[j, :-1] ** (m + 2) - h[j, 1:] ** (m + 2)
+            )
+            h[j + 1, 1:] = h[j, 1:] + (delta_t / delta_x) * (
+                delta_x * q[1:] - flux_difference
+            )
+            np.nan_to_num(h, copy=False)
+            h[j + 1, h[j + 1, :] < 0] = 0
+
+        self.h = h * self.glacier.H
 
     def plot(self, show: bool = True) -> plt.Figure:
         """
@@ -95,15 +143,47 @@ class FiniteVolumeSolver:
         :param show: If True, the plot will be shown.
         :return: Matplotlib Figure object containing plot(s).
         """
-        fig, ax = plt.subplots()
-        ax.set_title('Initial conditions')
-        ax.set_xlabel('$x$')
-        ax.set_ylabel('$z$')
+        fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
+        ax1.set_title('Initial conditions')
+        ax2.set_title('Final result')
+        ax1.set_xlabel('$x$')
+        ax2.set_xlabel('$x$')
+        ax1.set_ylabel('$z$')
 
-        ax.fill([0, *self.x_coordinates], [0, *self.initial_height])
-        ax.legend(['Glacier'])
+        ax1.fill(
+            [0, *self.glacier.xs.unscaled], [0, *self.glacier.h_0.unscaled]
+        )
+        if hasattr(self, 'h'):
+            ax2.fill([0, *self.glacier.xs], [0, *self.h[-1]])
+
+        ax1.legend(['Glacier'])
 
         if show:
             plt.show()
 
         return fig
+
+
+def simple_accumulation_model(
+    snow_line: float,
+    tongue: float,
+    permanent_snow_rate: float,
+    stop: float,
+    num: int,
+) -> Tuple[np.ndarray, np.ndarray]:
+    xs = np.linspace(start=0, stop=stop, num=num)
+    print(xs)
+    slope = -2 * permanent_snow_rate * tongue / (tongue - snow_line) ** 2
+
+    q = np.zeros(num)
+    dx = stop / (num - 1)
+    snow_line_index = int(snow_line * dx)
+    q[:snow_line_index] = permanent_snow_rate
+
+    tongue_index = int(tongue * dx)
+    slope_index_rate = slope * dx
+    q[snow_line_index + 1 : tongue_index + 1] = (
+        slope_index_rate * np.arange(tongue_index - snow_line_index)
+        + permanent_snow_rate
+    )
+    return q
