@@ -35,6 +35,19 @@ def test_simple_accumulation_model():
     )
 
 
+def test_plotting_initial_conditions():
+    xs, q = simple_accumulation_model(
+        snow_line=300,
+        tongue=600,
+        stop=1000,
+        permanent_snow_rate=1,
+        num=1001,
+        h_0=50,
+    )
+    glacier = GlacierParameters(h_0=50, xs=xs, q=q, alpha=np.radians(3))
+    glacier.plot(show=False)
+
+
 def test_finite_volume_solver(finite_volume_solver):
     """Test plot method creating solution plot."""
     finite_volume_solver.plot(show=False)
