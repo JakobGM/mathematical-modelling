@@ -41,7 +41,7 @@ class GlacierParameters:
 
     # Another material property from Glen's law
     # TODO: Find the typical value for this one!
-    mu: float = 1.0
+    mu: float = 9.3e-25
 
     def __post_init__(self) -> None:
         """Calculate derived constants."""
