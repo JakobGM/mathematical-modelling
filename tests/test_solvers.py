@@ -4,11 +4,7 @@ import numpy as np
 
 import pytest
 
-from solvers import (
-    FiniteVolumeSolver,
-    GlacierParameters,
-    simple_accumulation_model,
-)
+from solvers import FiniteVolumeSolver, GlacierParameters
 
 
 @pytest.fixture
@@ -26,25 +22,11 @@ def finite_volume_solver() -> FiniteVolumeSolver:
     return FiniteVolumeSolver(glacier)
 
 
-def test_simple_accumulation_model():
-    _, q = simple_accumulation_model(
-        snow_line=3, tongue=9, permanent_snow_rate=2, num=11, stop=10
-    )
-    np.testing.assert_array_equal(
-        q, np.array([2, 2, 2, 1, 0, -1, -2, -3, -4, 0, 0])
-    )
-
-
 def test_plotting_initial_conditions():
-    xs, q = simple_accumulation_model(
-        snow_line=300,
-        tongue=600,
-        stop=1000,
-        permanent_snow_rate=1,
-        num=1001,
-        h_0=50,
+    xs = np.arange(0, 1001).astype(float)
+    glacier = GlacierParameters(
+        h_0=10000, xs=xs, alpha=np.radians(3), q=xs, x_f=600, x_s=300
     )
-    glacier = GlacierParameters(h_0=50, xs=xs, q=q, alpha=np.radians(3))
     glacier.plot(show=False)
 
 
