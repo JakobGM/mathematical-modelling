@@ -172,18 +172,17 @@ def simple_accumulation_model(
     num: int,
 ) -> Tuple[np.ndarray, np.ndarray]:
     xs = np.linspace(start=0, stop=stop, num=num)
-    print(xs)
     slope = -2 * permanent_snow_rate * tongue / (tongue - snow_line) ** 2
 
     q = np.zeros(num)
     dx = stop / (num - 1)
     snow_line_index = int(snow_line * dx)
-    q[:snow_line_index] = permanent_snow_rate
+    q[: snow_line_index - 1] = permanent_snow_rate
 
     tongue_index = int(tongue * dx)
     slope_index_rate = slope * dx
-    q[snow_line_index + 1 : tongue_index + 1] = (
-        slope_index_rate * np.arange(tongue_index - snow_line_index)
+    q[snow_line_index - 1 : tongue_index] = (
+        slope_index_rate * np.arange(tongue_index - snow_line_index + 1)
         + permanent_snow_rate
     )
-    return q
+    return xs, q

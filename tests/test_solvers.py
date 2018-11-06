@@ -27,12 +27,12 @@ def finite_volume_solver() -> FiniteVolumeSolver:
 
 
 def test_simple_accumulation_model():
-    q = simple_accumulation_model(
+    _, q = simple_accumulation_model(
         snow_line=3, tongue=9, permanent_snow_rate=2, num=11, stop=10
     )
-    # np.testing.assert_array_equal(
-    #     q, np.array([2, 2, 2, 1, 0, -1, -2, -3, -4, 0, 0])
-    # )
+    np.testing.assert_array_equal(
+        q, np.array([2, 2, 2, 1, 0, -1, -2, -3, -4, 0, 0])
+    )
 
 
 def test_finite_volume_solver(finite_volume_solver):
