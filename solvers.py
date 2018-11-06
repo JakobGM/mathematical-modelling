@@ -59,7 +59,6 @@ class GlacierParameters:
         self.q = PhysicalVariable(unscaled=self.q, scaled=self.q / self.Q)
 
         # Scale other variables
-        self.h_0 = PhysicalVariable(unscaled=self.h_0, scaled=self.h_0 / self.H)
         self.xs = PhysicalVariable(unscaled=self.xs, scaled=self.xs / self.L)
 
         # Stress scaler
@@ -78,6 +77,7 @@ class GlacierParameters:
 
         if isinstance(self.h_0, (int, float)):
             self.h_0 = self.generate_steady_state_height(h_0=self.h_0)
+        self.h_0 = PhysicalVariable(unscaled=self.h_0, scaled=self.h_0 / self.H)
 
     def generate_steady_state_height(self, h_0: float) -> np.ndarray:
         """Return height profile resulting in steady state, given q."""
@@ -89,6 +89,20 @@ class GlacierParameters:
         integrated_q += integral_constant
         integrated_q[integrated_q < 0.0] = 0.0
         return (integrated_q / self.lambda_) ** (1 / (self.m + 2))
+
+    def plot(self, show: bool = True) -> plt.Axes:
+        fig, ax = plt.subplots(1, 1)
+        ax.set_title('Initial conditions')
+        ax.set_xlabel('$x$')
+        ax.set_ylabel('$z$')
+
+        ax.fill([0, *self.xs.unscaled], [0, *self.h_0.unscaled])
+        ax.legend(['Glacier'])
+
+        if show:
+            plt.show()
+
+        return fig
 
 
 class FiniteVolumeSolver:
