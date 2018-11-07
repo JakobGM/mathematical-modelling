@@ -1,6 +1,7 @@
 from collections import namedtuple
 from dataclasses import dataclass
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
+from tqdm import tqdm
 
 import matplotlib.pyplot as plt
 
@@ -209,8 +210,6 @@ class FiniteVolumeSolver:
         q = self.glacier.q.scaled
         m = self.glacier.m
 
-        from tqdm import tqdm
-
         for j in tqdm(np.arange(start=0, stop=num_t - 1)):
             flux_difference = lambda_ * (
                 h[j, :-1] ** (m + 2) - h[j, 1:] ** (m + 2)
@@ -249,3 +248,81 @@ class FiniteVolumeSolver:
             plt.show()
 
         return fig
+
+
+class UpwindSolver:
+    # TODO: A very naive CFL condition, not analytically found at all
+    CFL: float = 0.1
+
+    def __init__(self, glacier: GlacierParameters) -> None:
+        self.glacier = glacier
+
+    def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
+        # Scale x coordinates
+        xs = self.glacier.xs.scaled
+
+        # Scale height coordinates
+        h_0 = self.glacier.h_0.scaled
+
+        # Spatial step used
+        delta_x = xs[1] - xs[0]
+
+        # Determine temporal time step
+        delta_t = delta_t or self.CFL * delta_x
+
+        num_t = int(t_end / delta_t)
+        num_x = len(xs)
+
+        h = np.zeros([num_t, num_x], dtype=float)
+        h[:, 0] = h_0[0]
+        h[0, :] = h_0
+
+        kappa = self.glacier.kappa
+        q = self.glacier.q.scaled
+        m = self.glacier.m
+
+        for j in tqdm(np.arange(start=0, stop=num_t - 1)):
+            # Assert that glacier does not grow out of modelling area
+            assert(np.isclose(h[j, -1], 0))
+
+            forward_vec = np.append(h[j, 2:], 0)
+
+            h[j + 1, 1:] = delta_t * (
+                    kappa * (h[j, 1:])**(m + 1)
+                        * (forward_vec - h[j, 1:]) / delta_x
+                    + q
+            )
+
+            # TODO: Remove the following?
+            assert(h[j + 1, 1:] > 0 and h[j + 1, :])
+            assert(not np.isnan(np.sum(h[j + 1, 1:])))
+
+        self.h = h * self.glacier.H
+
+
+    # def plot(self, show: bool = True) -> plt.Figure:
+    #     """
+    #     Plot solution and initial conditions.
+    #
+    #     :param show: If True, the plot will be shown.
+    #     :return: Matplotlib Figure object containing plot(s).
+    #     """
+    #     fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
+    #     ax1.set_title('Initial conditions')
+    #     ax2.set_title('Final result')
+    #     ax1.set_xlabel('$x$')
+    #     ax2.set_xlabel('$x$')
+    #     ax1.set_ylabel('$z$')
+    #
+    #     ax1.fill(
+    #         [0, *self.glacier.xs.unscaled], [0, *self.glacier.h_0.unscaled]
+    #     )
+    #     if hasattr(self, 'h'):
+    #         ax2.fill([0, *self.glacier.xs], [0, *self.h[-1]])
+    #
+    #     ax1.legend(['Glacier'])
+    #
+    #     if show:
+    #         plt.show()
+    #
+    #     return fig
