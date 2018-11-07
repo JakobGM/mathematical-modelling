@@ -64,6 +64,7 @@ def plot_internal_flow_field(glacier, zs, U, V):
     h = glacier.h_0.unscaled
     x = glacier.xs.unscaled
     z = zs * glacier.H
+    print(glacier.lambda_)
 
     # Horizontal velocity scaler
     U_scaling = glacier.Q * glacier.L / glacier.H
@@ -75,7 +76,7 @@ def plot_internal_flow_field(glacier, zs, U, V):
 
     fig = glacier.plot(show=False)
     axes = fig.axes
-    axes[0].streamplot(
+    strm = axes[0].streamplot(
         x,
         z,
         U_scaled,
@@ -83,7 +84,8 @@ def plot_internal_flow_field(glacier, zs, U, V):
         color=np.sqrt((np.power(U_scaled, 2) + np.power(V_scaled, 2))),
         cmap='autumn',
     )
-    plt.show()
+    fig.colorbar(strm.lines, orientation='horizontal')
+    axes[0].set_title("Flow field for stationary glacier")
 
 
 angle = 5
@@ -101,3 +103,10 @@ U, V, glacier, zs = stationary_internal_flow_field(
     xs, h_0, angle, arbitrary_production
 )
 plot_internal_flow_field(glacier, zs, U, V)
+plt.savefig('report/images/flow_field_arbitrary_production')
+
+U, V, glacier, zs = stationary_internal_flow_field(
+    xs, h_0, angle, linear_production
+)
+plot_internal_flow_field(glacier, zs, U, V)
+plt.savefig('report/images/flow_field_linear_production')
