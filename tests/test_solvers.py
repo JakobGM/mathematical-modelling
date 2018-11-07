@@ -23,9 +23,9 @@ def finite_volume_solver() -> FiniteVolumeSolver:
 
 
 def test_plotting_initial_conditions():
-    xs = np.arange(0, 1001).astype(float)
+    xs = np.arange(0, 5001).astype(float)
     glacier = GlacierParameters(
-        h_0=10000, xs=xs, alpha=np.radians(3), q=xs, x_f=600, x_s=300
+        h_0=50, xs=xs, alpha=np.radians(3), q_0=0.0000001, x_s=3000, x_f=4000
     )
     glacier.plot(show=False)
 
@@ -70,10 +70,10 @@ def test_glacier_parameters():
     assert params.epsilon == 3.0 / 400.0
     assert params.alpha == np.radians(3)
     assert params.theta == 917 * 9.8 * 3 * np.sin(np.radians(3))
-    assert params.Q == 2.0
+    assert params.Q == 2.0 / (3600 * 24 * 365)
 
     theta_cubed = (917 * 9.8 * 3 * np.sin(np.radians(3))) ** 3
-    kappa = 2 * 3 * 1 * theta_cubed * (3 / 400) / 2
+    kappa = 2 * 3 * 1 * theta_cubed * (3 / 400) / (2 / (3600 * 24 * 365))
     assert params.kappa == kappa
     assert params.lambda_ == kappa / 5
 

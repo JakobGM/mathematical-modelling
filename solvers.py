@@ -57,6 +57,14 @@ class GlacierParameters:
     def __post_init__(self) -> None:
         """Calculate derived constants."""
         # Approximated to be a small parameter
+        seconds_in_year = 3600 * 24 * 365
+        if self.q is not None:
+            self.q = self.q / seconds_in_year
+            assert self.q_0 is None
+        if self.q_0 is not None:
+            self.q_0 = self.q_0 / seconds_in_year
+            assert self.q is None
+
         self.epsilon: float = self.H / self.L
 
         # Scale other variables
@@ -97,11 +105,10 @@ class GlacierParameters:
         h_0 = self.h_0 / self.H
         xs = self.xs.scaled
         q = self.q.scaled
-        integrated_q = integrate.cumtrapz(y=q, x=xs, initial=0)
-        integral_constant = self.lambda_ * h_0 ** (self.m + 2)
-        integrated_q += integral_constant
+        integrated_q = integrate.cumtrapz(y=q, x=xs, initial=0) / self.lambda_
+        integrated_q += h_0 ** (self.m + 2)
         integrated_q[integrated_q < 0.0] = 0.0
-        return (integrated_q / self.lambda_) ** (1 / (self.m + 2)) * self.H
+        return integrated_q ** (1 / (self.m + 2)) * self.H
 
     def create_simple_accumulation_model(self):
         xs = self.xs.scaled
@@ -124,7 +131,7 @@ class GlacierParameters:
 
         slope = (
             -2
-            * (q_0 * x_f + (self.lambda_ * h_0) ** (self.m + 2))
+            * (q_0 * x_f + self.lambda_ * h_0 ** (self.m + 2))
             / (x_f - x_s) ** 2
         )
 
@@ -156,7 +163,9 @@ class GlacierParameters:
         ax.set_xlim(0, xs[-1])
 
         ax2 = ax.twinx()
-        ax2.plot(self.q.unscaled, color='tab:red', alpha=0.7)
+        ax2.plot(
+            self.q.unscaled * (3600 * 24 * 365), color='tab:red', alpha=0.7
+        )
         ax2.set_ylabel('$q$')
         ax2.legend(['Accumulation rate'], loc='lower right')
 
