@@ -164,7 +164,10 @@ class GlacierParameters:
 
         ax2 = ax.twinx()
         ax2.plot(
-            self.q.unscaled * (3600 * 24 * 365), color='tab:red', alpha=0.7
+            self.xs.unscaled,
+            self.q.unscaled * (3600 * 24 * 365),
+            color='tab:red',
+            alpha=0.7,
         )
         ax2.set_ylabel('$q$')
         ax2.legend(['Accumulation rate'], loc='lower right')
