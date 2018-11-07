@@ -5,10 +5,15 @@ import matplotlib.pyplot as plt
 from solvers import GlacierParameters
 
 
-def stationary_internal_flow_field(xs, h_0, angle, q_0, x_s, x_f):
+def stationary_internal_flow_field(xs, h_0, angle, production):
     alpha = np.radians(angle)
 
-    glacier = GlacierParameters(xs=xs, x_s=x_s, x_f=x_f, q_0=q_0, h_0=h_0, alpha=alpha)
+    assert len(production) == 3 or len(production) == 1
+
+    if len(production) == 3:
+        glacier = GlacierParameters(xs=xs, x_s=production[0], x_f=production[1], q_0=production[2], h_0=h_0, alpha=alpha)
+    else:
+        glacier = GlacierParameters(xs=xs, q=production[0], alpha=alpha, h_0=h_0)
 
     xs = glacier.xs.scaled
     hs = glacier.h_0.scaled
@@ -44,14 +49,15 @@ def plot_internal_flow_field(glacier, zs, U, V):
 
     #Horizontal velocity scaler
     U_scaling = glacier.Q*glacier.L/glacier.H
+    U_scaled = U*U_scaling
 
     #Vertical velocity scaler
     V_scaling = glacier.Q
+    V_scaled = V*V_scaling
 
-    inc = 1
     fig = glacier.plot(show=False)
     axes = fig.axes
-    axes[0].streamplot(x, z, U*U_scaling, V*V_scaling, color=np.sqrt((np.power(U,2)+np.power(V, 2))), cmap='summer')
+    axes[0].streamplot(x, z, U_scaled, V_scaled, color=np.sqrt((np.power(U_scaled,2)+np.power(V_scaled, 2))), cmap='autumn')
     plt.show()
 
 angle = 5
@@ -61,5 +67,9 @@ x_s = 100
 x_f = 400
 q_0 = 0.05
 
-U, V, glacier, zs = stationary_internal_flow_field(xs, h_0, angle, q_0, x_s, x_f)
+linear_production = [x_s, x_f, q_0]
+q = lambda x: 0.1*np.sin(x/25)/((x+1)/25) - 0.01
+arbitrary_production = [np.array(list(map(q, xs)))]
+
+U, V, glacier, zs = stationary_internal_flow_field(xs, h_0, angle, arbitrary_production)
 plot_internal_flow_field(glacier, zs, U, V)
