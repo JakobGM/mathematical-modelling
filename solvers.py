@@ -197,7 +197,6 @@ class FiniteVolumeSolver:
         delta_x = xs[1] - xs[0]
 
         lambda_ = self.glacier.lambda_
-        kappa = self.glacier.kappa
         m = self.glacier.m
 
         # Determine temporal time step
@@ -213,15 +212,14 @@ class FiniteVolumeSolver:
 
         q = self.glacier.q.scaled
 
+        q_trapez = (delta_t / 2) * (q[:-1] + q[1:])
+        C = lambda_ * delta_t / delta_x
+
         for j in tqdm(np.arange(start=0, stop=num_t - 1)):
-            flux_difference = lambda_ * (
-                h[j, :-1] ** (m + 2) - h[j, 1:] ** (m + 2)
-            )
-            h[j + 1, 1:] = h[j, 1:] + (delta_t / delta_x) * (
-                delta_x * q[1:] - flux_difference
-            )
-            np.nan_to_num(h, copy=False)
-            h[j + 1, h[j + 1, :] < 0] = 0
+            now = h[j]
+            future = h[j + 1]
+            flux_difference = now[1:] ** int(m + 2) - now[:1] ** int(m + 2)
+            future[1:] = now[1:] + q_trapez + C * flux_difference
 
         self.h = h * self.glacier.H
 
