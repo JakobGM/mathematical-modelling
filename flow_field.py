@@ -41,19 +41,25 @@ def stationary_internal_flow_field(xs, h_0, angle, production):
 
     f_derivative = lambda i, z, dx: (f(i + 1, z) - f(i - 1, z)) / (2 * dx)
 
-    v = (
-        lambda i, z, dx: -glacier.kappa
-        / (glacier.m + 1)
-        * f_derivative(i, z, dx)
-    )
+    f_derivative_forward = lambda i, z, dx: (f(i + 1, z) - f(i, z)) / dx
+
+    f_derivative_backward = lambda i, z, dx: (f(i, z) - f(i - 1, z)) / dx
+
+    def v(i, z, dx, N):
+        if i == 0:
+            return -glacier.kappa/(glacier.m + 1)*f_derivative_forward(i, z, dx)
+        elif i == N-1:
+            return -glacier.kappa/(glacier.m + 1)*f_derivative_backward(i, z, dx)
+        else:
+            return -glacier.kappa/(glacier.m + 1)*f_derivative(i, z, dx)
 
     U = np.zeros((xs.shape[0], zs.shape[0]))
     V = np.zeros((xs.shape[0], zs.shape[0]))
 
-    for i in range(1, xs.shape[0] - 1):
-        for j in range(1, zs.shape[0] - 1):
+    for i in range(xs.shape[0]):
+        for j in range(zs.shape[0]):
             U[i, j] = u(i, zs[j])
-            V[i, j] = v(i, zs[j], xs[1] - xs[0])
+            V[i, j] = v(i, zs[j], xs[1] - xs[0], xs.shape[0])
         U[i, np.greater(zs, np.ones((zs.shape)) * hs[i])] = 0
         V[i, np.greater(zs, np.ones((zs.shape)) * hs[i])] = 0
 
@@ -64,7 +70,6 @@ def plot_internal_flow_field(glacier, zs, U, V):
     h = glacier.h_0.unscaled
     x = glacier.xs.unscaled
     z = zs * glacier.H
-    print(glacier.lambda_)
 
     # Horizontal velocity scaler
     U_scaling = glacier.Q * glacier.L / glacier.H
