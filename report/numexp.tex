@@ -1,1 +1,195 @@
-Numerical experiments placeholder.
+\textbf{CFL-condition}:
+For the differential equation
+\begin{equation*}
+    \frac{\partial h}{\partial t} + \lambda \frac{\partial h}{\partial x} = 0
+\end{equation*}
+%
+the CFL condition will be $C = \left | \lambda \frac{\Delta t}{\Delta x}\right| < 1$
+%
+However, we want to simulate the behaviour of:
+\begin{equation}
+    \partial_th+\lambda \frac{\dif}{\dif{x}}h^{m+2} = q
+\end{equation}
+%
+which can be written as
+%
+\begin{equation}
+    \partial_th+\lambda (m+2)h^{m+1} \frac{\dif}{\dif{x}}h = q.
+\end{equation}
+%
+If we assume that $q$ is sufficiently small, thus locally constant, this term can be neglected. Since this equation is scaled, a likely bound for the maximum value of the height $h_{\text{max}} < 2$, so the CFL-condition becomes:
+\begin{equation*}
+    C = \left | \lambda (m+2) 2^{m+1} \frac{\Delta t}{\Delta x}\right| = \left | \kappa 2^{m+1} \frac{\Delta t}{\Delta x}\right| < 1
+\end{equation*}
+A simplified model for q will be used
+
+\begin{verbatim}
+    q|
+     |
+     |
+q_0  |___________________________
+     |                          | \
+     |                             \
+     |                          |   \
+     |_______________________________\    |______|__________
+     |                          x_s   \   x_f
+     |                                 \
+     |                                  \
+\end{verbatim}
+
+The toe of the glacier remains t be solved for.
+%
+Now apply the finite volume method for this problem. Sub-divide the x-domain of interest $[0,L]$
+%
+\begin{align*}
+ \begin{split}
+     0 &= x_1 < x_2 < \dots < x_n = L\\
+     \Delta x :&= x_{i+1} -x_i \Rightarrow \quad \text{constant step length}
+ \end{split}   
+\end{align*}
+
+Now solve for numerically:
+\begin{equation*}
+    \begin{cases}
+    & \frac{\dif}{\dif{t}}\int_{x_{i}}^{x_{i+1}} h(x,t) \dif{x} + j(x_i, t) - j(x_{i+1},t) = \int_{x_{i}}^{x_{i+1}} q(x,t) \dif{x} \\
+    & j(x,t) := \lambda h^{m+2}
+    \end{cases}
+\end{equation*}
+
+Now numerical approximations:
+\begin{align*}
+    \begin{split}
+        & \frac{\dif}{\dif{t}} \left [h_i^j \Delta x \right] + \lambda \left[\left(h_i^j\right)^{m+2} - \left(h_{i+1}^j\right)^{m+2} \right] \approx \Delta x \cdot q_i^j \\
+        & \frac{\Delta x}{\Delta t} \left (h_i^{j+1} - h_i^j\right) + \lambda \left[\left(h_i^j\right)^{m+2} - \left(h_{i+1}^j\right)^{m+2} \right] \approx \Delta x \cdot q_i^j \\
+        & h_i^{i+1} \approx h_i^{i} + \frac{\Delta x}{\Delta t} \left (\Delta x\cdot q_i^j - \lambda \left[\left(h_i^j\right)^{m+2} - \left(h_{i+1}^j\right)^{m+2} \right]  \right), \\
+    \end{split}
+\end{align*}
+
+where we can choose $q_0$ and $\left(h_0^{j}\right) = $ const.
+%
+Given $q(x)$, find $h(x)$ steady state:
+\begin{align*}
+    \begin{split}
+        h(x) &= \frac{1}{\lambda^{1/m+2}}\left(\int_0^xq(y)\dif{y} +C\right)^{1/m+2} \\
+        h(0) &= \left(\frac{c}{\lambda}\right)^\frac{1}{m+2} \Rightarrow C = \lambda h(O)^{m+2} \\
+        h(x) &= \left[\frac{1}{\lambda}\left( \int_0^xq(y)\dif{y} +\lambda h(O)^{m+2}\right)\right]^{1/m+2} \\
+        h(x) &= \left(\frac{1}{\lambda} \int_0^xq(y)\dif{y} \right)^{1/m+2} + h(0) \\
+    \end{split}
+\end{align*}
+%
+\red{Her skjønner jeg ikke helt rekkefølgen på ting... -Johan}
+%
+\begin{align*}
+    \begin{split}
+        \int \dif f(x) &= \int g(x) \dif{x} \qquad Q(0) = f(0) \\
+        f(x) &= \int^x g(y) \dif{y} + \\
+        \int g(x) \dif{x} &= G(x) \\
+        \int_a^x g(y) \dif{y} &= G(X) - G(a)
+    \end{split}
+\end{align*}
+%
+\red{**FIGUR**}
+%
+\begin{align*}
+    \begin{split}
+        q_0 x_0 &= q_0 + \int_0^{x_F-x_S} \\
+        \frac{q_0 x_s - q_0}{\frac{1}{2}(x_F - x_S)^2} &= \alpha \\
+        \alpha &= \frac{2q_0 (x_s - 1)}{(x_F - x_S)^2}
+    \end{split}
+\end{align*}
+%
+\red{**FIGUR**}
+%
+\begin{align*}
+    \begin{split}
+        & q_0 x_S + \int_0^{x_F - x_S}(q_0 + \alpha x) \dif{x} = 0\\
+        & q_0 x_S + \left[q_0 x + \frac{1}{2}\alpha x^2\right]_0^{x_F - x_S} = 0\\
+        & q_0 x_S + q_0 (x_F - x_S) + \frac{1}{2}\alpha (x_F - x_S)^2 = 0\\
+    \end{split}
+\end{align*}
+%
+\red{**FIGUR**}
+%
+\begin{align*}
+    \begin{split}
+        \alpha &= \frac{-2(q_0 x_F + h_0)}{(x_F - x_0)^2} \\
+        \lim_{t\rightarrow \infty} k &= 0 \\
+        \frac{\partial u}{\partial t} &= -u
+    \end{split}
+\end{align*}
+%
+\begin{align*}
+    \begin{split}
+        q_0 x_S + \int_0^{x_F - x_S}(\alpha x + q_0) \dif{x} = 0 \\
+        \frac{\partial k}{ \partial t} + \kappa \frac{\dif}{\dif{x}} \left( h_0^{m+1}k\right) = 0 \\
+        \lambda \frac{\dif}{\dif{x}} \left( h_0^{m+2}k\right) = q \\
+        \frac{\partial k}{ \partial t}+ \kappa \frac{\dif}{\dif{x}}\left( h_0^{m+1}\right) + \kappa h_0^{m+1}\frac{\dif}{\dif{x}}k = 0\\
+        \frac{\dif}{\dif{x}} \left(h_0^{m+2} h_0^{-1}\right) = \frac{\dif}{\dif{x}} \left( h_0^{m+2}\right) \frac{1}{h_0} + h^{m+2} \frac{\dif}{\dif{x}}\left( \frac{1}{h_0}\right) = \dots \\
+    \end{split}
+\end{align*}
+%
+Now use that $ \frac{\dif}{\dif{x}} \left( h_0^{m+2}\right) = \frac{q}{\lambda}$
+%
+\begin{align*}
+    \begin{split}
+        \dots = \frac{q}{\lambda h_0} + h^{m+2} \frac{\dif}{\dif{x}} \left( \frac{1}{h_0}\right)\\
+    \end{split}
+\end{align*}
+%
+\begin{align*}
+    \begin{split}
+        \frac{\partial k}{ \partial t}+ \kappa k \left( \frac{q}{\lambda h_0} + h^{m+2} \frac{\dif}{\dif{x}} \left(\frac{1}{h_0}\right)\right) + \kappa h_0^{m+1} \frac{\dif{k}}{\dif{x}} = 0 \\
+        \frac{\partial k}{ \partial t}+ \kappa k \left( \frac{q}{\lambda h_0} + \frac{j(x)}{\lambda} \frac{\dif}{\dif{x}} \left(\frac{1}{h_0}\right)\right) + \kappa h_0^{m+1} \frac{\dif{k}}{\dif{x}} = 0
+    \end{split}
+\end{align*}
+%
+\begin{align*}
+    \begin{split}
+        \frac{\partial k}{\partial t} = - \kappa \frac{\dif{}}{\dif{x}} \left(h_0^{m+1} k\right)
+    \end{split}
+\end{align*}
+%
+Which gives the scheme
+\begin{align*}
+    \begin{split}
+        k_i^{j+1} - k_i^j &= - \frac{k}{2\Delta x} \left( \left(h_0^{m+1}\right)_{i+1}^j k_{i+1}^j - \left( h_0^{m+1}\right)_{i-1}^j k_{i-1}^j \right) \\
+        k_i^{j+1} &= k_i^j - \frac{k}{2\Delta x} \left( \left(h_0^{m+1}\right)_{i+1}^j k_{i+1}^j - \left( h_0^{m+1}\right)_{i-1}^j k_{i-1}^j \right) 
+    \end{split}
+\end{align*}
+%
+Given $h_0, k_0$ and $ \red{(0 <?) }k_0 \ll 1$
+%
+\begin{align*}
+    \begin{split}
+        h(x) &= \left(\frac{1}{\lambda} \int_N q^{\text{noe??}} q_0 \right)^{\frac{1}{m+2}} \\
+        h(0) &= h_0 = \left(\frac{1}{\lambda}q_0\right)^{1/m+2} \Rightarrow q_0 = (\lambda h_0 )^{m+2}
+    \end{split}
+\end{align*}
+%
+\red{**FIGUR**}
+%
+\begin{align*}
+    \begin{split}
+        h(x) &= \left(\frac{1}{\lambda} \int q \dif{x} \right)^{\frac{1}{m+2}} \\
+        h(x) &= \left(\frac{1}{\lambda} \int_T q \dif{x} + (h_0 \lambda)^{m+2} \right)^{\frac{1}{m+2}}
+    \end{split}
+\end{align*}
+%
+Tongue:
+\begin{align*}
+    x_F = \int_0^{x_F} q(y) \dif{y} = 0 \\
+\end{align*}
+%
+$\dots$
+%
+\begin{align*}
+    q_0 x_F + \frac{1}{2} \alpha (x_F - x_S)^2 &= -\frac{1}{\lambda} h_0^{m+2} \\
+    \alpha &= \frac{-2 \left(q_0 x_F + \frac{1}{\lambda} h_0^{m+2}\right)}{(x_F - x_S)^2}
+\end{align*}
+%
+$\dots$
+%
+\begin{align*}
+      -\lambda h(0)^{m+2}&= q_0 x_F + \frac{1}{2} \alpha (x_F - x_S)^2  \\
+    \alpha &= \frac{-2 \left(q_0 x_F + \lambda h(0)^{m+2}\right)}{(x_F - x_S)^2}
+\end{align*}

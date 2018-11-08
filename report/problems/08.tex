@@ -1,1 +1,15 @@
-Answer placeholder.
+Using that $\partial_{z}\tau_{xz} = -1$ and $\tau_{xz}(h) = 0$ we get that $\tau_{xz} = -z + h$. By inserting this into the approximation for $\partial_{z}u$, and using that $z \in \left[0, h\right]$ we get that $\partial_{z}u = \kappa(-z + h)^{m}$. Integrating and combining this with $u(x, 0, t) = 0$ leaves us with $u = \frac{\kappa}{m+1}\left[h^{m+1} - (h - z)^{m+1}\right]$. Inserting this expression for $u$ into equation~\eqref{eq:conservation_of_matter_rescaled} leaves us with 
+%
+\begin{equation}
+    Q \pd{{h}}{{t}} + Q\frac{\kappa}{m+1}\od{}{{x}}\int_0^h h^{m+1} - (h - z)^{m+1} \dif{z} = Qq
+\end{equation}
+
+Performing the integration, \textcolor{red}{assuming q in previous problems should be $q^*$, and $q^* = Qq$ check}, leaves us with
+%
+\begin{equation}\label{eq:rescaled_conservation_of_matter}
+    \pd{{h}}{{t}} + \lambda \od{}{{x}}h^{m+2} = q,
+\end{equation}
+%
+where $\lambda = \frac{\kappa}{m+2}$.
+
+We have the boundary condition $h(x,0) = h_0$, and in particular $h(L, 0) = 0$. \textcolor{red}{Are we modelling a tongue or an entire glacier $\rightarrow h(0, 0) = 0$? Are we modelling a glacier in a steady state or the creation of a glacier $\rightarrow h(x, 0) = 0$? check}

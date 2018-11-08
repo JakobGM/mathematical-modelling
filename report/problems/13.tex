@@ -1,1 +1,15 @@
-Answer placeholder.
+Starting with a steady state $h_0 = h_0(x)$ for some accumulation rate $q = q(x)$, i.e. $\partial_t h = 0$, we have from equation~\eqref{eq:rescaled_conservation_of_matter} that $\lambda \partial_x h_0^{m+2} = q$. We now assume a small perturbation $h_\delta = h_0 + \delta k$ where $\delta > 0$ is a small parameter. Inserting into equation~\eqref{eq:rescaled_conservation_of_matter} and performing a Taylor expansion of $h_\delta^{m+2}$ around $h_0$ gives
+%
+\begin{equation}
+    \delta \partial_t k + \delta \od{}{x} g(h,k) + o(\delta) = 0,
+    \label{eq:rescaled_conservation_of_matter_perturbation}
+\end{equation}
+where $g(h,k) = \kappa h_0^{m+1} k$.
+
+Ignoring $o(\delta)$,
+%
+\begin{equation}
+    \partial_t k = - \kappa k \od{}{x} h_0^{m+1} = - \kappa k (m+1) h_0^m \od{}{x} h_0.
+\end{equation}
+%
+$\kappa (m+1) h_0^m > 0$, so $h(x)$ will return to the steady state for $x$ where $\od{h_0}{x} > 0$, i.e. the steady states are asymptotically stable for $x$ where the slope of $h$ is positive. They are unstable for $x$ where the slope is negative and stable, but not asymptotically, for $x$ where the slope is zero (since $\partial_t k = 0$). The slope has to be negative from some point to the toe, so that part will always react to this kind of perturbations.

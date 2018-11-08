@@ -1,12 +1,12 @@
 We will now develop a model for the stress tensor $\tau^*$. We will make the (common) assumption that the stress tensor is is related to the strain rate by the following relations (\textit{Glen's law}):
 %
 \begin{equation*}
-  \begin{align}
+  \begin{split}
     \partial_{x^*} u^* &= \mu(\theta^*)^{m-1} \tau_{xx}^*, \\
     \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \\
     \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^* = \mu(\theta^*)^{m-1} \tau_{zx}^*.
-  \end{align}
-\end{equation}
+  \end{split}
+\end{equation*}
 %
 Here,
 
@@ -31,57 +31,57 @@ Additionaly, since compression is induced by the trace of the stress tensor, we 
   \end{aligned}
 \end{equation}
 %
-under the assumption of incompressibility. Inserting this into equation \eqref{eq:theta} yields:
+under the assumption of incompressibility. Inserting this into equation~\eqref{eq:theta} yields:
 %
 \begin{equation*}
   \theta^* := \left( {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 \right) ^{1/2}.
-\end{equation}
+\end{equation*}
 %
 Write the stress divergence as
 %
 \begin{equation}
-  \begin{align}
+  \begin{split}
     \nabla \cdot \tau_x^* &= \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^*, \\
     \nabla \cdot \tau_z^* &= \partial_{x^*} \tau_{zx}^* + \partial_{z^*} \tau_{zz}^*,
-  \end{align}
+  \end{split}
 \end{equation}
 %
-and insert relationship \eqref{eq:non-rotational-tensor} and \eqref{eq:incompressible-tensor} into this formulation, resulting in
+and insert relationship~\eqref{eq:non-rotational-tensor} and~\eqref{eq:incompressible-tensor} into this formulation, resulting in
 %
 \begin{equation} \label{eq:stress-divergence}
-  \begin{align}
+  \begin{split}
     \nabla \cdot \tau_x^* &= \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^*, \\
     \nabla \cdot \tau_z^* &= \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^*.
-  \end{align}
+  \end{split}
 \end{equation}
 %
-Now, insert equation \eqref{eq:stress-divergence} into equation \eqref{eq:steady-state-explicit}, yielding
+Now, insert equation~\eqref{eq:stress-divergence} into equation~\eqref{eq:steady-state-explicit}, yielding
 %
 \begin{equation}
-  \begin{align}
+  \begin{split}
     \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
     \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0.
-  \end{align}
+  \end{split}
 \end{equation}
 %
-Finally, we rewrite the velocity divergence \eqref{eq:velocity-divergence} as
+Finally, we rewrite the velocity divergence~\eqref{eq:velocity-divergence} as
 %
 \begin{equation*}
   \nabla \cdot \vec{w}^* = \partial_{x^*} u^* + \partial_{z^*} v^* = 0.
-\end{equation}
+\end{equation*}
 %
 After all these simplifications, we end up with the following equation set for the interior of the glacier
 %
-\begin{equation} \label{eq:conservation-of-momentum}
-  \begin{align}
+\begin{equation} \label{eq:interior_equations}
+  \begin{split}
     \nabla \cdot \vec{w}^* = \partial_{x^*} u^* + \partial_{z^*} v^* &= 0, \\
     \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
     \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0, \\
     \partial_{x^*} u^* &= \mu(\theta^*)^{m-1} \tau_{xx}^*, \\
-    \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \text{\red{~~Why is this not included?}}\\
+    \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \text{\red{~~Why is this not included? check}}\\
     \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^*, \\
     \theta^* &= \left( {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 \right) ^{1/2},
-  \end{align}
+  \end{split}
 \end{equation}
 
 with unknowns $u^*$, $v^*$, $h^*$, $\tilde{p}^*$, $\tau_{xx}^*$, and $\theta^*$.
