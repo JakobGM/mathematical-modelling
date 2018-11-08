@@ -72,7 +72,7 @@ class GlacierParameters:
         self.xs = PhysicalVariable(unscaled=self.xs, scaled=self.xs / self.L)
 
         if self.q is not None:
-            self.Q = np.abs(self.q).max()
+            self.Q = np.abs(self.q).max() or 1 / seconds_in_year
         else:
             assert self.q_0
             self.Q = self.q_0
@@ -251,9 +251,6 @@ class FiniteVolumeSolver:
 
 
 class UpwindSolver:
-    # TODO: A very naive CFL condition, not analytically found at all
-    CFL: float = 0.1
-
     def __init__(self, glacier: GlacierParameters) -> None:
         self.glacier = glacier
 
@@ -267,8 +264,13 @@ class UpwindSolver:
         # Spatial step used
         delta_x = xs[1] - xs[0]
 
+        lambda_ = self.glacier.lambda_
+        kappa = self.glacier.kappa
+        m = self.glacier.m
+
         # Determine temporal time step
-        delta_t = delta_t or self.CFL * delta_x
+        delta_t = delta_t or 0.5 * delta_x / lambda_  # naive CFL
+        # delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
 
         num_t = int(t_end / delta_t)
         num_x = len(xs)
@@ -277,25 +279,29 @@ class UpwindSolver:
         h[:, 0] = h_0[0]
         h[0, :] = h_0
 
-        kappa = self.glacier.kappa
         q = self.glacier.q.scaled
-        m = self.glacier.m
 
         for j in tqdm(np.arange(start=0, stop=num_t - 1)):
             # Assert that glacier does not grow out of modelling area
             assert(np.isclose(h[j, -1], 0))
 
             forward_vec = np.append(h[j, 2:], 0)
-
-            h[j + 1, 1:] = delta_t * (
-                    kappa * (h[j, 1:])**(m + 1)
-                        * (forward_vec - h[j, 1:]) / delta_x
-                    + q
+            this_vec = h[j, 1:]
+            h[j + 1, 1:] = this_vec + delta_t * (
+                q[1:] - kappa * this_vec**(m+1) * (
+                    forward_vec - this_vec
+                ) / delta_x
             )
 
+            h[j + 1, 1:][h[j + 1, 1:] < 0] = 0
+
+            this_h = h[j + 1, 1:]
+            # plt.plot(self.glacier.H * this_h)
+            print(j, this_h.argmin(), this_h.min(), this_h.argmax(), this_h.max())
+
             # TODO: Remove the following?
-            assert(h[j + 1, 1:] > 0 and h[j + 1, :])
             assert(not np.isnan(np.sum(h[j + 1, 1:])))
+            assert(np.all(h[j + 1, 1:] >= 0))
 
         self.h = h * self.glacier.H
 
