@@ -1,7 +1,23 @@
 We use the scales
 %
 \begin{equation*}
-    \Theta = \Theta_{xz} = \rho g H \, \text{sin} \, \alpha, \quad \text{and} \quad \Theta_{xx} = P = \frac{H}{L} \Theta
+    \Theta = \Theta_{xz} = \rho g H \, \sin (\alpha) \quad \text{and} \quad \Theta_{xx} = P = \frac{H}{L} \Theta = \epsilon \Theta
 \end{equation*}
 %
 for the stresses $\theta^*$, $\tau_{xz}^*$ and $\tau_{xx}^*$ and the pressure $\tilde{p}^*$, balancing the other equations in our system.
+
+Rescaling the equations~\eqref{eq:interior_equations}, we obtain
+%
+\begin{subequations}
+\begin{align}
+    \partial_x u + \partial_z v &= 0, \label{eq:interior_equations_rescaled1}\\
+    \frac{\Theta}{L} \epsilon \partial_x \tau_{xx} + \frac{\Theta}{H} \partial_z \tau_{xz} + \rho g \sin(\alpha) - \rho g \cos(\alpha) \, \epsilon \partial_x h - \frac{\Theta}{L} \epsilon \partial_x \tilde{p} &= 0, \label{eq:interior_equations_rescaled2}\\
+    \partial_x \tau_{xz} - \partial_z \tau_{xx} - \partial_z \tilde{p} &= 0, \label{eq:interior_equations_rescaled3}\\
+    \frac{Q}{H} \partial_x u &= \mu \Theta^m \epsilon \theta^{m-1} \tau_{xx}, \label{eq:interior_equations_rescaled4}\\
+    \frac{1}{2}(\frac{Q}{H} \frac{1}{\epsilon} \partial_z u + \frac{Q}{L} \partial_x v) &= \mu \Theta^m \theta^{m-1} \tau_{xz}, \label{eq:interior_equations_rescaled5}\\
+    \theta &= \left( \epsilon^2 \tau_{xx}^2 + \tau_{xz}^2 \right)^{1/2}. \label{eq:interior_equations_rescaled6}
+\end{align}
+\label{eq:interior_equations_rescaled}
+\end{subequations}
+
+Performing a first order asymptotic on equation~\eqref{eq:interior_equations_rescaled2} we obtain $\Theta \partial_z \tau_{xz} \approx - \rho g H \sin(\alpha) = - \Theta \Rightarrow \partial_z \tau_{xz} \approx -1$. Equation~\eqref{eq:interior_equations_rescaled6} gives $\theta \approx |\tau_{xz}|$. With this we obtain from equation~\eqref{eq:interior_equations_rescaled5} $\partial_z u \approx \partial_z u + \epsilon^2 \partial_x v = \kappa |\tau_{xz}|^{m-1} \tau_{xz}$, where $\kappa = 2H \mu \Theta^m \epsilon / Q$. A first order expansion of equation~\eqref{eq:interior_equations_rescaled4} simply gives $\partial_x u = 0$.
