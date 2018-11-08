@@ -7,7 +7,7 @@ Conservation of momentum and Newton's second law of motion implies that the velo
   \end{cases}
 \end{equation}
 
-\red{We should convince ourselves that those red parens should not be there!}
+\red{We should convince ourselves that those red parens should not be there! check}
 
 Here, $f = (f_x, f_y)$ denotes the body forces on each point, $p^*$ the pressure, and
 
@@ -21,10 +21,10 @@ the stress tensor in two dimensions. The pressure $p^*$ can be written as a sum
   p^*(x^*, z^*, t^*) = \rho g \cos(\alpha) \cdot (h^*(x^*, t^*) - z^*) + \tilde{p}^*(x^*, z^*, t^*)
 \end{equation}
 
-with $g$ being the gravitational acceleration at the surface of the earth ($\approx \SI{9.8}{\meter\per\square\second}$). The first term in \eqref{eq:pressure} is the hydrostatic pressure within the glacier, and the second term is the counterpressure induced by the constant density $\rho$.
+with $g$ being the gravitational acceleration at the surface of the earth ($\approx \SI{9.8}{\meter\per\square\second}$). The first term in~\eqref{eq:pressure} is the hydrostatic pressure within the glacier, and the second term is the counterpressure induced by the constant density $\rho$.
 
-We will now model the body forces within the glacier \red{(what does "model" entail exactly here?)}. First observe that the two first terms of the left hand side of equation \eqref{eq:momentum-conservation} are the time and space derivatives of momentum.
-We can make a simplification by assuming that gravity and friction changes are much greater than momentum and pressure changes, resulting in a steady state. This two terms can therefore be approximated to $0$, simplifying equation \eqref{eq:momentum-conservation} to \red{Is this correct? Pressure should probably not be neglected...}
+We will now model the body forces within the glacier \red{(what does "model" entail exactly here?) hva betyr det å "modele" body forces? Beskrive kreftene}. First observe that the two first terms of the left hand side of equation~\eqref{eq:momentum-conservation} are the time and space derivatives of momentum.
+We can make a simplification by assuming that gravity and friction changes are much greater than momentum and pressure changes, resulting in a steady state. This two terms can therefore be approximated to $0$, simplifying equation~\eqref{eq:momentum-conservation} to \red{Is this correct? Pressure should probably not be neglected... check}
 
 \begin{equation} \label{eq:steady-state-unknown-force}
   \begin{cases}
@@ -39,7 +39,7 @@ The pointwise gravitational force $\vec{f_g}$ is given by
   \vec{f_g} = \begin{bmatrix} f_{gx} \\ f_{gz} \end{bmatrix} = \begin{bmatrix} \rho g \sin(\alpha) \\ \rho g \cos(\alpha) \end{bmatrix}.
 \end{equation}
 
-Under the assumption that the dominating body force is $f_g$ \red{(again, this needs to be argued for better)}, equation \eqref{eq:steady-state-unknown-force} becomes:
+Under the assumption that the dominating body force is $f_g$ \red{(again, this needs to be argued for better. are there other body forces?), The Coriolis force might be present, but unless we are modelling the glaciers over Antarctica, we can just assume only gravitational forces}, equation~\eqref{eq:steady-state-unknown-force} becomes:
 
 \begin{equation} \label{eq:steady-state-implicit}
   \begin{cases}
@@ -48,20 +48,20 @@ Under the assumption that the dominating body force is $f_g$ \red{(again, this n
   \end{cases}
 \end{equation}
 
-The space derivatives of the pressure sum given in equation \eqref{eq:pressure} can be calculated as
+The space derivatives of the pressure sum given in equation~\eqref{eq:pressure} can be calculated as
 
 \begin{equation} \label{eq:pressure-space-derivative}
-  \begin{align}
+  \begin{split}
   \partial_{x^*} p^* &= \rho g \cos(\alpha) \cdot \partial_{x^*} h^* + \partial_{x^*} \tilde{p}^*, \\
   \partial_{z^*} p^* &= - \rho g \cos(\alpha) + \partial_{z^*} \tilde{p}^*.
-  \end{align}
+  \end{split}
 \end{equation}
 
-Inserting these results into equation \eqref{eq:steady-state-implicit} yields
+Inserting these results into equation~\eqref{eq:steady-state-implicit} yields
 
 \begin{equation} \label{eq:steady-state-explicit}
-  \begin{align}
+  \begin{split}
     \nabla \cdot \tau_x^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
     \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0,
-  \end{align}
+  \end{split}
 \end{equation}

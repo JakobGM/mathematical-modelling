@@ -1,1 +1,13 @@
-Answer placeholder.
+As derived in problem 8
+%
+\begin{equation}
+    u = \frac{\kappa}{m+1} \left[ h^{m+1} - (h-z)^{m+1} \right].
+    \label{eq:explicit_u_h}
+\end{equation}
+%
+Inserting equation~\eqref{eq:explicit_u_h} into equation ~\eqref{eq:interior_equations_rescaled1}, integrating with respect to $z$ and using the boundary condition $v(x,0,t) = 0$ results in
+%
+\begin{equation}
+    v = - \pd{}{x} \frac{\kappa}{m+1} \left[ h^{m+1}z + \frac{1}{m+2} \left( [h-z]^{m+2} - h^{m+2} \right) \right].
+    \label{eq:explicit_v_h}
+\end{equation}

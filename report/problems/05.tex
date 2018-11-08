@@ -1,1 +1,26 @@
-Answer placeholder.
+Let the production, length pr. unit time, be denoted by $q^*(x^*, t^*)$. The density is given as mass pr. unit area and is constant throughout the glacier. R is a control area extending over the interval $\left[x^*, x^* + \epsilon\right]$, from the bottom of the glacier to the surface.  Conservation of matter can then be formulated as
+
+\begin{equation}\label{eq:conservation_51}
+     \od{}{t}\int_{R}\rho\ \dif A + \int_{{\partial}R}\rho(\vec{w^*}\cdot\vec{n})\ \dif \sigma = \rho\int_Rq^*(x^*, t^*)\ \dif x
+\end{equation}
+
+The term $(\vec{w^*}\cdot\vec{n})$ is reduced to $u^*(x^*, t^*)$ due to the fact that there's only movement across the boundary at points where the normal vector of $R$ points in or opposite of $x$-direction. Equation~\eqref{eq:conservation_51} can therefore be rewritten as
+
+\begin{align}
+\begin{split}\label{eq:conservation_52}
+    &\od{}{t}\int_{x^*}^{x^* + \epsilon}h^*(x^*, t^*)\ \dif x \\ &+ \left[\int_0^{h^*(x^* + \epsilon, t^*)}u^*(x^* + \epsilon, z^*, t^*)\ \dif{z^*} - \int_0^{h^*(x^*, t^*)}u^*(x^*, z^*, t^*)\ \dif{z^*}\right] \\ 
+    &= \int_{x^*}^{x* + \epsilon}q^*(x^*, t^*)\ \dif x
+\end{split}
+\end{align}
+
+
+Note that the second term in~\eqref{eq:conservation_52} can be written as $f(x^* + \epsilon) - f(x^*)$, where $f(x^*) = \int_0^{h^*(x^*, t^*)}u^*(x^*, z^*, t^*)\ \mathrm{d}z^*$. Dividing by $\epsilon$ and letting $\epsilon \to 0$ gives us the definition of the derivative, and let's us rewrite the term as $\od{}{{x^*}} \int_0^{h^*(x^*, t^*)} u^*(x^*, z^*, t^*)\  \dif{z^*} $.
+
+The first term can be rewritten as $\od{}{t}\left[H^*(x^* + \epsilon, t^*) - H^*(x^*, t^*)\right]$, where $H^*(x^*, t^*)$ is the anti-derivative of $h^*(x^*, t^*)$. Dividing by $\epsilon$ and letting $\epsilon \to 0$ produces the derivative of $H^*(x^*, t^*)$, resulting in $\od{}{t}h^*(x^*, t^*)$. The same technique can be used for the third term.
+
+By using the results above we get the following equation when dividing the whole equation by $\epsilon$ and letting $\epsilon \to 0$.
+
+\begin{equation}\label{eq:conservation_of_matter}
+    \pd{{h^*}}{{t^*}} + \od{}{{x^*}}\int_0^{h^*(x^*, t^*)} u^* (x^*, z^*, t^*) \dif{z^*} = q^*(x^*, t^*)
+\end{equation}
+

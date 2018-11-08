@@ -1,1 +1,15 @@
-Answer placeholder.
+\label{sec:steady_state}
+
+A steady state is identified by setting $\pd{h}{t} = 0$. Combining this with our expression from $\eqref{eq:rescaled_conservation_of_matter}$ leaves us with $ \od{}{x}h^{m+2} = \frac{q}{\lambda}$. Integrating and solving for $h$ leaves us with the following equation for identifying steady states.
+%
+\begin{equation}
+    h = \left(\frac{{\int}q(x)\,\dif{x}}{\lambda}\right)^{\frac{1}{m+2}}
+\end{equation}
+
+The toe of a glacier in a steady state can be found my setting $h = h(x) = 0$ and taking the smallest value for which this hold. The toe, $x_F$ can be written as 
+%
+\begin{equation}
+    x_F = \min\left\{x \colon {\int}q(x)\,\dif{x} = 0\right\}
+\end{equation}
+
+\textcolor{red}{What are reasonable boundary conditions? - $h(x, t) = h_0(x)$, $h_0(x_f) = 0$, more? check}

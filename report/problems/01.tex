@@ -8,16 +8,16 @@ The Eulerian formulation of the law of conservation of mass is given by
 
 Where $R_0$ is a given domain and $\partial R_0$ its boundary. $\vec{n}$ is the outer unit normal vector of the domain boundary surface, and $q$ the matter production within the domain.
 
-\textcolor{red}{Which smoothness assumptions are we making in the following derivation?}
+\textcolor{red}{Which smoothness assumptions are we making in the following derivation? Assume that $\rho(x,t)$ and $\vec{w}^*$ are reasonably smooth. Check}
 
 The differential form of this equation is
 
 \begin{equation}
   \pd{}{t} \rho + \nabla \cdot (\rho \vec{w}^*) = q.
-  \label{eq:conservation_of_matter}
+  \label{eq:conservation_of_matter_interior}
 \end{equation}
 
-Now we assume constant density $\rho$, resulting in $\pd{\rho}{t} = 0$ and $\nabla \cdot (\rho \vec{w}^*) = \rho \nabla \cdot \vec{w}^*$. We also assume to production of matter, $q = 0$ \textcolor{red}{(We have not been given this assumption! Is it correct?)}, resulting in the following conclusion
+Now we assume constant density $\rho$, resulting in $\pd{\rho}{t} = 0$ and $\nabla \cdot (\rho \vec{w}^*) = \rho \nabla \cdot \vec{w}^*$. We also assume to production of matter, $q = 0$ \textcolor{red}{(We have not been given this assumption! Is it correct?) check}, resulting in the following conclusion
 
 \begin{equation} \label{eq:velocity-divergence}
   \nabla \cdot \vec{w}^* = 0.
