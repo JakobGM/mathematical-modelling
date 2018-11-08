@@ -17,14 +17,14 @@ H = 50
 # h_0[0:int(len(xs)/2)] = H * np.sin(np.linspace(0, np.pi, int(len(xs)/2)))
 log_xs = np.log(xs + 1)
 log_xs = log_xs / max(log_xs) * H
-h_0[0:int(L/2) + 1] = log_xs[int(L/2):None:-1]
+h_0[0 : int(L / 2) + 1] = log_xs[int(L / 2) : None : -1]
 
-q[0:int(L/10)] = 1
-q[int(L/10):int(L/2)] = np.linspace(1, -5, num=(int(L/2) - int(L/10)))
+q[0 : int(L / 10)] = 1
+q[int(L / 10) : int(L / 2)] = np.linspace(1, -5, num=(int(L / 2) - int(L / 10)))
 
 glacier = GlacierParameters(xs=xs, q=q, h_0=h_0, alpha=alpha)
 
-#glacier.plot()
+# glacier.plot()
 
 t_end = 1e2
 
