@@ -1,17 +1,7 @@
 \textbf{CFL-condition}:
-For the differential equation
-\begin{equation*}
-    \frac{\partial h}{\partial t} + \lambda \frac{\partial h}{\partial x} = 0
-\end{equation*}
+For an explicit scheme for the differential equation $\partial h/\partial t + \lambda \partial h/ \partial x = 0$ the CFL-condition will be $C = \left | \lambda \frac{\Delta t}{\Delta x}\right| < 1$ \cite{???}.
 %
-the CFL condition will be $C = \left | \lambda \frac{\Delta t}{\Delta x}\right| < 1$
-%
-However, we want to simulate the behaviour of:
-\begin{equation}
-    \partial_th+\lambda \frac{\dif}{\dif{x}}h^{m+2} = q
-\end{equation}
-%
-which can be written as
+However, we want to simulate the behaviour of \eqref{eq:rescaled_conservation_of_matter}, which can be written as
 %
 \begin{equation}
     \partial_th+\lambda (m+2)h^{m+1} \frac{\dif}{\dif{x}}h = q.
@@ -19,7 +9,7 @@ which can be written as
 %
 If we assume that $q$ is sufficiently small, thus locally constant, this term can be neglected. Since this equation is scaled, a likely bound for the maximum value of the height $h_{\text{max}} < 2$, so the CFL-condition becomes:
 \begin{equation*}
-    C = \left | \lambda (m+2) 2^{m+1} \frac{\Delta t}{\Delta x}\right| = \left | \kappa 2^{m+1} \frac{\Delta t}{\Delta x}\right| < 1
+    C = \left | \lambda (m+2) \text{max}^{m+1} \frac{\Delta t}{\Delta x}\right| =\left | \kappa h_{\text{max}}^{m+1} \frac{\Delta t}{\Delta x}\right| < \left | \kappa 2^{m+1} \frac{\Delta t}{\Delta x}\right| < 1
 \end{equation*}
 A simplified model for q will be used
 
