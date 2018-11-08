@@ -196,8 +196,13 @@ class FiniteVolumeSolver:
         # Spatial step used
         delta_x = xs[1] - xs[0]
 
+        lambda_ = self.glacier.lambda_
+        kappa = self.glacier.kappa
+        m = self.glacier.m
+
         # Determine temporal time step
-        delta_t = delta_t or self.CFL * delta_x
+        delta_t = delta_t or 0.5 * delta_x / lambda_  # naive CFL
+        # delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
 
         num_t = int(t_end / delta_t)
         num_x = len(xs)
@@ -206,9 +211,7 @@ class FiniteVolumeSolver:
         h[:, 0] = h_0[0]
         h[0, :] = h_0
 
-        lambda_ = self.glacier.lambda_
         q = self.glacier.q.scaled
-        m = self.glacier.m
 
         for j in tqdm(np.arange(start=0, stop=num_t - 1)):
             flux_difference = lambda_ * (
