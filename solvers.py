@@ -48,7 +48,7 @@ class GlacierParameters:
 
     # Another material property from Glen's law
     # TODO: Find the typical value for this one!
-    mu: float = 9.3e-25
+    mu: float = 9.3e-21
 
     # Simple accumulation model
     q_0: Optional[float] = None
@@ -270,8 +270,8 @@ class UpwindSolver:
         m = self.glacier.m
 
         # Determine temporal time step
-        delta_t = delta_t or 0.5 * delta_x / lambda_  # naive CFL
-        # delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
+        # delta_t = delta_t or 0.5 * delta_x / lambda_  # naive CFL
+        delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
 
         num_t = int(t_end / delta_t)
         num_x = len(xs)
@@ -295,14 +295,14 @@ class UpwindSolver:
             this_q = q
             this_q[np.logical_and(no_ice_indices, q_negative_indices)] = 0
 
-            h[j + 1, 1:] = (
+            h[j + 1, 1:] = (h[j, 1:] + (
                     this_q[1:] * delta_t
                     - C1 * h[j, 1:]**(m+1) * (h[j, 1:] - h[j, :-1])
-            ).clip(min=0)
+            )).clip(min=0)
 
             this_h = h[j + 1, 1:]
             # plt.plot(self.glacier.H * this_h)
-            print(j, this_h.argmin(), this_h.min(), this_h.argmax(), this_h.max())
+            # print(j, this_h.argmin(), this_h.min(), this_h.argmax(), this_h.max())
 
             # TODO: Remove the following?
             assert(not np.isnan(np.sum(h[j + 1, 1:])))

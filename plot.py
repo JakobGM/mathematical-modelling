@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def animate_glacier(solver: Any, interval: float = 100, show: bool = True):
+def animate_glacier(solver: Any, interval: float = 100, plot_interval=1, show: bool = True):
     glacier = solver.glacier
     xs = glacier.xs.unscaled
     hs = solver.h
@@ -27,7 +27,7 @@ def animate_glacier(solver: Any, interval: float = 100, show: bool = True):
     animation = FuncAnimation(
         fig=fig,
         func=update,
-        frames=hs,
+        frames=hs[::plot_interval, :],
         init_func=init,
         blit=False,
         interval=interval,
