@@ -13,6 +13,8 @@ def animate_glacier(solver: Any, interval: float = 100, plot_interval=1, show: b
 
     fig, ax = plt.subplots()
     ax.set_title('Glacier Animation')
+    ax.set_xlim(xs.min(), xs.max())
+    ax.set_ylim(hs.min(), hs.max()*2)
     line, = plt.plot(xs, hs[0])
 
     def init():

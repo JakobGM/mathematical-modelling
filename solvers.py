@@ -255,7 +255,7 @@ class UpwindSolver:
     def __init__(self, glacier: GlacierParameters) -> None:
         self.glacier = glacier
 
-    def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
+    def solve(self, t_end: float, delta_t: Optional[float] = None, method=1) -> None:
         # Scale x coordinates
         xs = self.glacier.xs.scaled
 
@@ -269,9 +269,11 @@ class UpwindSolver:
         kappa = self.glacier.kappa
         m = self.glacier.m
 
-        # Determine temporal time step
+        # Determine time step
+        # TODO: Find suitable time step (check if stable for larger
+        # TODO: step, check if the two methods can use different steps
         # delta_t = delta_t or 0.5 * delta_x / lambda_  # naive CFL
-        delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
+        delta_t = delta_t or 2 * delta_x / (kappa * 2**(m+1)) # less naive?
 
         num_t = int(t_end / delta_t)
         num_x = len(xs)
@@ -284,27 +286,28 @@ class UpwindSolver:
         q_negative_indices = q < 0
 
         # Constant used in numerical scheme
-        C1 = kappa * delta_t / delta_x
+        if method == "upwind":
+            C1 = kappa * delta_t / delta_x
+        elif method == "finite volume":
+            C1 = lambda_ * delta_t / delta_x
 
         for j in tqdm(np.arange(start=0, stop=num_t - 1)):
-            # Assert that glacier does not grow out of modelling area
-            assert(np.isclose(h[j, -1], 0))
-
             # No melting where there is no ice
             no_ice_indices = h[j, :] == 0
-            this_q = q
+            this_q = q.copy()
             this_q[np.logical_and(no_ice_indices, q_negative_indices)] = 0
 
-            h[j + 1, 1:] = (h[j, 1:] + (
-                    this_q[1:] * delta_t
-                    - C1 * h[j, 1:]**(m+1) * (h[j, 1:] - h[j, :-1])
-            )).clip(min=0)
+            if method == "upwind":
+                h[j + 1, 1:] = (h[j, 1:] + (
+                        this_q[1:] * delta_t
+                        - C1 * h[j, 1:]**(m+1) * (h[j, 1:] - h[j, :-1])
+                )).clip(min=0)
+            elif method == "finite volume":
+                h[j + 1, 1:] = (h[j, 1:] + (
+                        this_q[1:] * delta_t
+                        - C1 * (h[j, 1:]**(m+2) - h[j, :-1]**(m+2))
+                )).clip(min=0)
 
-            this_h = h[j + 1, 1:]
-            # plt.plot(self.glacier.H * this_h)
-            # print(j, this_h.argmin(), this_h.min(), this_h.argmax(), this_h.max())
-
-            # TODO: Remove the following?
             assert(not np.isnan(np.sum(h[j + 1, 1:])))
             assert(np.all(h[j + 1, 1:] >= 0))
 
