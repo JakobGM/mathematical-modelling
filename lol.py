@@ -6,9 +6,9 @@ L = 1000
 n_x = L + 1
 xs = np.linspace(0, L, n_x)
 alpha = np.radians(3)
-t_end = 1e1
+t_end = 40
 
-steady_state = True
+steady_state = False
 upwind_scheme = True
 plot_initial = False
 
@@ -25,7 +25,7 @@ else:
     log_xs = log_xs / max(log_xs) * H
     h_0[0 : int(L / 2) + 1] = log_xs[int(L / 2) : None : -1]
 
-    q[0 : int(L / 10)] = 1
+    q[0 : int(L / 10)] = 0.01
     q[int(L / 10) : int(L / 2)] = np.linspace(1, -5, num=(int(L / 2) - int(L / 10)))
 
     glacier = GlacierParameters(xs=xs, q=q, h_0=h_0, alpha=alpha)

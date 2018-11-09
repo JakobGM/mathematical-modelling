@@ -200,7 +200,7 @@ class FiniteVolumeSolver:
         m = self.glacier.m
 
         # Determine temporal time step
-        delta_t = delta_t or 0.5 * delta_x / lambda_  # naive CFL
+        delta_t = delta_t or 0.1*0.5 * delta_x / lambda_  # naive CFL
         # delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
 
         num_t = int(t_end / delta_t)
@@ -281,20 +281,24 @@ class UpwindSolver:
         h[0, :] = h_0
 
         q = self.glacier.q.scaled
+        q_negative_indices = q < 0
+
+        # Constant used in numerical scheme
+        C1 = kappa * delta_t / delta_x
 
         for j in tqdm(np.arange(start=0, stop=num_t - 1)):
             # Assert that glacier does not grow out of modelling area
             assert(np.isclose(h[j, -1], 0))
 
-            forward_vec = np.append(h[j, 2:], 0)
-            this_vec = h[j, 1:]
-            h[j + 1, 1:] = this_vec + delta_t * (
-                q[1:] - kappa * this_vec**(m+1) * (
-                    forward_vec - this_vec
-                ) / delta_x
-            )
+            # No melting where there is no ice
+            no_ice_indices = h[j, :] == 0
+            this_q = q
+            this_q[np.logical_and(no_ice_indices, q_negative_indices)] = 0
 
-            h[j + 1, 1:][h[j + 1, 1:] < 0] = 0
+            h[j + 1, 1:] = (
+                    this_q[1:] * delta_t
+                    - C1 * h[j, 1:]**(m+1) * (h[j, 1:] - h[j, :-1])
+            ).clip(min=0)
 
             this_h = h[j + 1, 1:]
             # plt.plot(self.glacier.H * this_h)
