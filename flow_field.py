@@ -106,10 +106,10 @@ h_0 = 40
 xs = np.linspace(0, 500, 1000)
 x_s = 100
 x_f = 400
-q_0 = 0.05
+q_0 = 40
 
 linear_production = [x_s, x_f, q_0]
-q = lambda x: 0.1 * np.sin(x / 25) / ((x + 1) / 25) - 0.01
+q = lambda x: 100 * np.sin(x / 25) / ((x + 1) / 25) - 20
 arbitrary_production = [np.array(list(map(q, xs)))]
 
 U, V, glacier, zs = stationary_internal_flow_field(
