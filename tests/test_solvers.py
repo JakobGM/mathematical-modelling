@@ -87,17 +87,12 @@ def test_generate_steady_state_height_of_glacier():
     assert glacier
 
 
-def test_lol():
-    x_max = 1000
-    n = 100
-    xs = np.linspace(0, x_max, n)
-    q = np.linspace(1, -2, n)
+def test_calculation_of_steady_state():
+    num = 100
+    xs = np.linspace(0, 1000, num)
+    q = np.linspace(1, -2, num)
     gs = GlacierParameters(xs=xs, q=q, h_0=0.0003, alpha=np.radians(5))
-    import matplotlib.pyplot as plt
-
-    plt.plot(gs.xs, gs.h_0)
     assert not np.any(np.isnan(gs.h_0))
-    print(gs.h_0)
 
 
 def test_generation_of_steady_state_height():
