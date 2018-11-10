@@ -101,25 +101,27 @@ def plot_internal_flow_field(glacier, zs, U, V):
     axes[0].set_title("Flow field for stationary glacier")
 
 
-angle = 5
-h_0 = 40
-xs = np.linspace(0, 500, 1000)
-x_s = 100
-x_f = 400
-q_0 = 40
+if __name__ == '__main__':
+    # Only run this code if the module is invoked directly as a script
+    angle = 5
+    h_0 = 40
+    xs = np.linspace(0, 500, 1000)
+    x_s = 100
+    x_f = 400
+    q_0 = 40
 
-linear_production = [x_s, x_f, q_0]
-q = lambda x: 100 * np.sin(x / 25) / ((x + 1) / 25) - 20
-arbitrary_production = [np.array(list(map(q, xs)))]
+    linear_production = [x_s, x_f, q_0]
+    q = lambda x: 100 * np.sin(x / 25) / ((x + 1) / 25) - 20
+    arbitrary_production = [np.array(list(map(q, xs)))]
 
-U, V, glacier, zs = stationary_internal_flow_field(
-    xs, h_0, angle, arbitrary_production
-)
-plot_internal_flow_field(glacier, zs, U, V)
-plt.savefig('report/images/flow_field_arbitrary_production')
+    U, V, glacier, zs = stationary_internal_flow_field(
+        xs, h_0, angle, arbitrary_production
+    )
+    plot_internal_flow_field(glacier, zs, U, V)
+    plt.savefig('report/images/flow_field_arbitrary_production')
 
-U, V, glacier, zs = stationary_internal_flow_field(
-    xs, h_0, angle, linear_production
-)
-plot_internal_flow_field(glacier, zs, U, V)
-plt.savefig('report/images/flow_field_linear_production')
+    U, V, glacier, zs = stationary_internal_flow_field(
+        xs, h_0, angle, linear_production
+    )
+    plot_internal_flow_field(glacier, zs, U, V)
+    plt.savefig('report/images/flow_field_linear_production')
