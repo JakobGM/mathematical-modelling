@@ -141,17 +141,16 @@ class GlacierParameters:
         q = np.zeros(num)
         dx = stop / (num - 1)
         snow_line_index = int(x_s / dx)
-        q[: snow_line_index - 1] = q_0
+        q[:snow_line_index] = q_0
 
         tongue_index = int(x_f / dx)
         slope_index_rate = slope * dx
-        q[snow_line_index - 1 : tongue_index] = (
-            slope_index_rate * np.arange(tongue_index - snow_line_index + 1)
-            + q_0
+        q[snow_line_index:] = (
+            slope_index_rate * np.arange(num - snow_line_index) + q_0
         )
         self.q = self.Q * q
 
-    def plot(self, show: bool = True) -> plt.Axes:
+    def plot(self, show: bool = True) -> plt.Figure:
         fig, ax = plt.subplots(1, 1)
         ax.set_title('Initial conditions')
         ax.set_xlabel('$x$')
@@ -164,12 +163,13 @@ class GlacierParameters:
         ax.set_xlim(0, xs[-1])
 
         ax2 = ax.twinx()
-        ax2.plot(
-            self.xs.unscaled,
-            self.q.unscaled * (3600 * 24 * 365),
-            color='tab:red',
-            alpha=0.7,
-        )
+
+        # Set zero production from glacier toe and forwards
+        q = self.q.unscaled.copy()
+        tail_length = len(hs) - len(np.trim_zeros(hs, trim='b'))
+        q[-tail_length:] = 0
+
+        ax2.plot(xs, q * (3600 * 24 * 365), color='tab:red', alpha=0.7)
         ax2.set_ylabel('$q$')
         ax2.legend(['Accumulation rate'], loc='lower right')
 
