@@ -39,3 +39,6 @@ pytest-flake8
 
 # For plotting
 matplotlib
+
+# For visualized progress bars when performing long calculations
+tqdm

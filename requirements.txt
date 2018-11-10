@@ -46,5 +46,6 @@ pyyaml==3.13              # via aspy.yaml, pre-commit
 scipy==1.1.0
 six==1.11.0               # via cfgv, cycler, more-itertools, pip-tools, pre-commit, pytest, python-dateutil
 toml==0.10.0              # via black, pre-commit
+tqdm==4.28.1
 typed-ast==1.1.0          # via mypy
 virtualenv==16.0.0        # via pre-commit
