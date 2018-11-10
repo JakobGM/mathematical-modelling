@@ -320,30 +320,3 @@ class UpwindSolver:
             assert np.all(h[j + 1, 1:] >= 0)
 
         self.h = h * self.glacier.H
-
-    # def plot(self, show: bool = True) -> plt.Figure:
-    #     """
-    #     Plot solution and initial conditions.
-    #
-    #     :param show: If True, the plot will be shown.
-    #     :return: Matplotlib Figure object containing plot(s).
-    #     """
-    #     fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
-    #     ax1.set_title('Initial conditions')
-    #     ax2.set_title('Final result')
-    #     ax1.set_xlabel('$x$')
-    #     ax2.set_xlabel('$x$')
-    #     ax1.set_ylabel('$z$')
-    #
-    #     ax1.fill(
-    #         [0, *self.glacier.xs.unscaled], [0, *self.glacier.h_0.unscaled]
-    #     )
-    #     if hasattr(self, 'h'):
-    #         ax2.fill([0, *self.glacier.xs], [0, *self.h[-1]])
-    #
-    #     ax1.legend(['Glacier'])
-    #
-    #     if show:
-    #         plt.show()
-    #
-    #     return fig
