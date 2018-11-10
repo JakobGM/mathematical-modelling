@@ -219,6 +219,15 @@ class Solver(abc.ABC):
     def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
         raise NotImplementedError
 
+    def save(self, name: str) -> None:
+        with open(name + '_solver.pickle', 'wb') as f:
+            pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    @staticmethod
+    def load(name: str) -> 'Solver':
+        with open(name + '_solver.pickle', 'rb') as f:
+            return pickle.load(f)
+
 
 class FiniteVolumeSolver(Solver):
     # A very naive CFL condition, not analytically found at all
