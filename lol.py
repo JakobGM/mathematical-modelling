@@ -15,7 +15,9 @@ plot_initial = False
 
 if steady_state:
     q_0 = 1
-    glacier = GlacierParameters(xs=xs, alpha=alpha, q_0=1e0, x_s=xs[-1]*0.3, x_f=xs[-1]*0.6, h_0=50)
+    glacier = GlacierParameters(
+        xs=xs, alpha=alpha, q_0=1e0, x_s=xs[-1] * 0.3, x_f=xs[-1] * 0.6, h_0=50
+    )
 else:
     q = np.zeros(len(xs))
     h_0 = np.zeros(len(xs))
@@ -31,7 +33,9 @@ else:
     ## zero h_0
 
     q[0 : int(L / 10)] = 1
-    q[int(L / 10) : int(L / 2)] = np.linspace(1, -5, num=(int(L / 2) - int(L / 10)))
+    q[int(L / 10) : int(L / 2)] = np.linspace(
+        1, -5, num=(int(L / 2) - int(L / 10))
+    )
 
     glacier = GlacierParameters(xs=xs, q=q, h_0=h_0, alpha=alpha)
 
