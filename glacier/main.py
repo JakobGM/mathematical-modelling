@@ -1,4 +1,4 @@
-from solvers import UpwindSolver, FiniteVolumeSolver, GlacierParameters
+from glacier.solvers import UpwindSolver, FiniteVolumeSolver, GlacierParameters
 from plot import animate_glacier
 import numpy as np
 

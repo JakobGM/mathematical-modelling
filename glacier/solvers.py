@@ -1,3 +1,4 @@
+import abc
 from collections import namedtuple
 from dataclasses import dataclass
 from typing import Optional, Union
@@ -97,13 +98,15 @@ class GlacierParameters:
         self.q = PhysicalVariable(unscaled=self.q, scaled=self.q / self.Q)
 
         if isinstance(self.h_0, (int, float)):
-            self.h_0 = self.generate_steady_state_height(h_0=self.h_0)
+            self.h_0 = self.generate_steady_state_height()
         self.h_0 = PhysicalVariable(unscaled=self.h_0, scaled=self.h_0 / self.H)
 
-    def generate_steady_state_height(self, h_0: float) -> np.ndarray:
+    def generate_steady_state_height(self) -> np.ndarray:
         """Return height profile resulting in steady state, given q."""
-        assert isinstance(h_0, (float, int))
-        h_0 = self.h_0 / self.H
+        if isinstance(self.h_0, PhysicalVariable):
+            h_0 = self.h_0.scaled[0]
+        else:
+            h_0 = self.h_0 / self.H
         xs = self.xs.scaled
         q = self.q.scaled
         integrated_q = integrate.cumtrapz(y=q, x=xs, initial=0) / self.lambda_
@@ -179,12 +182,47 @@ class GlacierParameters:
         return fig
 
 
-class FiniteVolumeSolver:
-    # A very naive CFL condition, not analytically found at all
-    CFL: float = 0.1
+class Solver(abc.ABC):
+    CFL: float
 
     def __init__(self, glacier: GlacierParameters) -> None:
         self.glacier = glacier
+
+    def plot(self, show: bool = True) -> plt.Figure:
+        """
+        Plot solution and initial conditions.
+
+        :param show: If True, the plot will be shown.
+        :return: Matplotlib Figure object containing plot(s).
+        """
+        fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
+        ax1.set_title('Initial conditions')
+        ax2.set_title('Final result')
+        ax1.set_xlabel('$x$')
+        ax2.set_xlabel('$x$')
+        ax1.set_ylabel('$z$')
+
+        ax1.fill(
+            [0, *self.glacier.xs.unscaled], [0, *self.glacier.h_0.unscaled]
+        )
+        if hasattr(self, 'h'):
+            ax2.fill([0, *self.glacier.xs.unscaled], [0, *self.h[-1]])
+
+        ax1.legend(['Glacier'])
+
+        if show:
+            plt.show()
+
+        return fig
+
+    @abc.abstractmethod
+    def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
+        raise NotImplementedError
+
+
+class FiniteVolumeSolver(Solver):
+    # A very naive CFL condition, not analytically found at all
+    CFL: float = 0.1
 
     def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
         # Scale x coordinates
@@ -223,38 +261,8 @@ class FiniteVolumeSolver:
 
         self.h = h * self.glacier.H
 
-    def plot(self, show: bool = True) -> plt.Figure:
-        """
-        Plot solution and initial conditions.
 
-        :param show: If True, the plot will be shown.
-        :return: Matplotlib Figure object containing plot(s).
-        """
-        fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
-        ax1.set_title('Initial conditions')
-        ax2.set_title('Final result')
-        ax1.set_xlabel('$x$')
-        ax2.set_xlabel('$x$')
-        ax1.set_ylabel('$z$')
-
-        ax1.fill(
-            [0, *self.glacier.xs.unscaled], [0, *self.glacier.h_0.unscaled]
-        )
-        if hasattr(self, 'h'):
-            ax2.fill([0, *self.glacier.xs], [0, *self.h[-1]])
-
-        ax1.legend(['Glacier'])
-
-        if show:
-            plt.show()
-
-        return fig
-
-
-class UpwindSolver:
-    def __init__(self, glacier: GlacierParameters) -> None:
-        self.glacier = glacier
-
+class UpwindSolver(Solver):
     def solve(
         self, t_end: float, delta_t: Optional[float] = None, method=1
     ) -> None:

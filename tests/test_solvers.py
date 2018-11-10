@@ -4,7 +4,7 @@ import numpy as np
 
 import pytest
 
-from glacier.solvers import FiniteVolumeSolver, GlacierParameters
+from glacier.solvers import FiniteVolumeSolver, GlacierParameters, UpwindSolver
 
 
 @pytest.fixture
@@ -95,17 +95,27 @@ def test_calculation_of_steady_state():
     assert not np.any(np.isnan(gs.h_0))
 
 
-def test_generation_of_steady_state_height():
+@pytest.fixture
+def glacier():
     xs = np.arange(0, 1000).astype(float)
     q_0 = 70
     snow_line = 400.0
     glacier_toe = 700.0
     angle = np.radians(3)
     h_0 = 40
-    glacier = GlacierParameters(
+    return GlacierParameters(
         xs=xs, q_0=q_0, alpha=angle, x_s=snow_line, x_f=glacier_toe, h_0=h_0
     )
+
+
+def test_generation_of_steady_state_height(glacier):
     assert glacier.h_0.unscaled[0] == 40
     assert glacier.h_0.unscaled[-1] == 0
     assert glacier.h_0.unscaled[699] > 0
     assert glacier.h_0.unscaled[700] == 0
+
+
+def test_plotting_final_result_of_solver(glacier):
+    solver = UpwindSolver(glacier)
+    solver.solve(t_end=10, method='upwind solver')
+    solver.plot(show=False)
