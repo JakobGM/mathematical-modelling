@@ -1,5 +1,5 @@
-from plot import animate_glacier
-from solvers import GlacierParameters, UpwindSolver
+from glacier.plot import animate_glacier
+from glacier.solvers import GlacierParameters, UpwindSolver
 
 import numpy as np
 

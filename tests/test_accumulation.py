@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from accumulation import simple_model
+from glacier.accumulation import simple_model
 
 
 def test_permanent_snow_line():

@@ -4,7 +4,7 @@ import numpy as np
 
 import pytest
 
-from solvers import FiniteVolumeSolver, GlacierParameters
+from glacier.solvers import FiniteVolumeSolver, GlacierParameters
 
 
 @pytest.fixture
