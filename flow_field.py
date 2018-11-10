@@ -47,11 +47,19 @@ def stationary_internal_flow_field(xs, h_0, angle, production):
 
     def v(i, z, dx, N):
         if i == 0:
-            return -glacier.kappa/(glacier.m + 1)*f_derivative_forward(i, z, dx)
-        elif i == N-1:
-            return -glacier.kappa/(glacier.m + 1)*f_derivative_backward(i, z, dx)
+            return (
+                -glacier.kappa
+                / (glacier.m + 1)
+                * f_derivative_forward(i, z, dx)
+            )
+        elif i == N - 1:
+            return (
+                -glacier.kappa
+                / (glacier.m + 1)
+                * f_derivative_backward(i, z, dx)
+            )
         else:
-            return -glacier.kappa/(glacier.m + 1)*f_derivative(i, z, dx)
+            return -glacier.kappa / (glacier.m + 1) * f_derivative(i, z, dx)
 
     U = np.zeros((xs.shape[0], zs.shape[0]))
     V = np.zeros((xs.shape[0], zs.shape[0]))
