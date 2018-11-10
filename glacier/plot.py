@@ -2,8 +2,8 @@ from typing import Optional
 
 from glacier.solvers import Solver
 
-from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 import numpy as np
 
@@ -20,10 +20,10 @@ def animate_glacier(
     hs = solver.h[::plot_interval]
 
     # Create figure used for animation
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(subplot_kw={'autoscale_on': False})
     ax.set_title('Glacier Animation')
     ax.set_xlim(xs.min(), xs.max())
-    ax.set_ylim(hs.min(), hs.max() * 2)
+    ax.set_ylim(hs.min(), 1.4 * hs.max())
 
     # Plot initial height
     ax.plot(
@@ -46,19 +46,42 @@ def animate_glacier(
         label='steady state height',
     )
 
+    # Plot accumulation rate
+    q = glacier.q.unscaled.copy()
+
+    # Scale hot and cold areas seperately to [-1, 1]
+    q[q < 0] /= -q.min()
+    q[q > 0] /= q.max()
+    assert q.max() == 1
+    assert q.min() == -1
+
+    # Negate q in order to get proper coolwarm colorscheme
+    background = [-q]
+    ax.imshow(
+        background,
+        aspect='auto',
+        vmin=-1,
+        vmax=1,
+        extent=[xs.min(), xs.max(), hs.min(), 2 * hs.max()],
+        alpha=0.4,
+        cmap='coolwarm',
+    )
+    ax.set_aspect(10)
+
     # Create line segment updated in each frame
-    line, = plt.plot(xs, hs[0], label='current height')
+    filled_glacier = plt.fill_between(
+        xs, hs[0], label='current height', color='#0074D9'
+    )
 
     ax.legend()
 
     def init():
-        line.set_ydata([np.nan] * len(xs))
-        return (line,)
+        return
 
     def update(frame, *fargs):
-        # ln.set_data(xs, frame)
-        line.set_ydata(frame)
-        return (line,)
+        latest_child = ax.get_children()[0]
+        latest_child.remove()
+        plt.fill_between(xs, frame, label='current height', color='#0074D9')
 
     animation = FuncAnimation(
         fig=fig,
@@ -71,7 +94,7 @@ def animate_glacier(
     )
 
     if save_to:
-        animation.save(save_to, dpi=80, writer='imagemagick')
+        animation.save(save_to + '.gif', dpi=80, writer='imagemagick')
 
     if show:
         plt.show()
