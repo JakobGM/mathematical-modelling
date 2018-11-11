@@ -1,6 +1,8 @@
-from glacier.solvers import UpwindSolver, FiniteVolumeSolver, GlacierParameters
-from plot import animate_glacier
 import numpy as np
+
+from glacier.physics import GlacierParameters
+from glacier.plot import animate_glacier
+from glacier.solvers import UpwindSolver
 
 L = 500
 n_x = L + 1

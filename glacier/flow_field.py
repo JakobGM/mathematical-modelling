@@ -2,7 +2,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-from solvers import GlacierParameters
+from glacier.physics import GlacierParameters
 
 
 def stationary_internal_flow_field(xs, h_0, angle, production):
