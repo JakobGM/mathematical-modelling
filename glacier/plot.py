@@ -85,7 +85,7 @@ def animate_glacier(
 
     def update(step, *fargs):
         frame = hs[step]
-        for artist in ax.get_children()[0:2]:
+        for artist in ax.get_children()[0 : 2 if flow_field else 1]:
             artist.remove()
         plt.fill_between(xs, frame, label='current height', color='#0074D9')
 
