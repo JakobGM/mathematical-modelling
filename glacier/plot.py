@@ -92,9 +92,9 @@ def animate_glacier(
         if flow_field:
             # keep = lambda x: not isinstance(x, mpl.patches.FancyArrowPatch)
             ax.patches = []
-            U = solver.Us[step] * glacier.Q * glacier.L / glacier.H
-            V = solver.Vs[step] * glacier.Q
-            z = solver.zs[step] * glacier.H
+            U = solver.Us[step]
+            V = solver.Vs[step]
+            z = solver.zs[step]
             speed = np.sqrt(U * U + V * V)
             ax.streamplot(
                 xs,

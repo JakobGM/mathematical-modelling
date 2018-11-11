@@ -65,6 +65,10 @@ class Solver(abc.ABC):
         angle = np.degrees(self.glacier.alpha)
         q = [self.glacier.q.unscaled]
 
+        U_scale = self.glacier.Q * self.glacier.L / self.glacier.H
+        V_scale = self.glacier.Q
+        z_scale = self.glacier.H
+
         self.flow_field_step = step
         self.Us = []
         self.Vs = []
@@ -73,9 +77,9 @@ class Solver(abc.ABC):
             U, V, _, z = stationary_internal_flow_field(
                 xs=xs, h_0=height, angle=angle, production=q
             )
-            self.Us.append(U)
-            self.Vs.append(V)
-            self.zs.append(z)
+            self.Us.append(U_scale * U)
+            self.Vs.append(V_scale * V)
+            self.zs.append(z_scale * z)
 
 
 class FiniteVolumeSolver(Solver):
