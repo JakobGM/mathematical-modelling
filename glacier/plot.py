@@ -1,11 +1,11 @@
 from typing import Optional
 
-from glacier.solvers import Solver
-
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 import numpy as np
+
+from glacier.solvers import Solver
 
 
 def animate_glacier(
@@ -14,6 +14,7 @@ def animate_glacier(
     plot_interval: int = 1,
     show: bool = True,
     save_to: Optional[str] = None,
+    flow_field: bool = False,
 ):
     glacier = solver.glacier
     xs = glacier.xs.unscaled
@@ -75,28 +76,50 @@ def animate_glacier(
 
     ax.legend()
 
+    if flow_field:
+        solver.calculate_flow_fields(step=plot_interval)
+        assert solver.flow_field_step == plot_interval
+
     def init():
         return
 
-    def update(frame, *fargs):
-        latest_child = ax.get_children()[0]
-        latest_child.remove()
+    def update(step, *fargs):
+        frame = hs[step]
+        for artist in ax.get_children()[0:2]:
+            artist.remove()
         plt.fill_between(xs, frame, label='current height', color='#0074D9')
+
+        if flow_field:
+            # keep = lambda x: not isinstance(x, mpl.patches.FancyArrowPatch)
+            ax.patches = []
+            U = solver.Us[step] * glacier.Q * glacier.L / glacier.H
+            V = solver.Vs[step] * glacier.Q
+            z = solver.zs[step] * glacier.H
+            speed = np.sqrt(U * U + V * V)
+            ax.streamplot(
+                xs,
+                z,
+                U,
+                V,
+                linewidth=2 * speed / speed.max() + 1,
+                color='white',
+                density=1,
+            )
 
     animation = FuncAnimation(
         fig=fig,
         func=update,
-        frames=hs,
+        frames=len(hs),
         init_func=init,
         blit=False,
         interval=interval,
         repeat=True,
     )
 
-    if save_to:
-        animation.save(save_to + '.gif', dpi=80, writer='imagemagick')
-
     if show:
         plt.show()
+
+    if save_to:
+        animation.save(save_to + '.gif', dpi=80, writer='imagemagick')
 
     return fig

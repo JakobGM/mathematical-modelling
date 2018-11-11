@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+from glacier.flow_field import stationary_internal_flow_field
 from glacier.physics import GlacierParameters
 
 
@@ -55,6 +56,26 @@ class Solver(abc.ABC):
     def load(name: str) -> 'Solver':
         with open(name + '_solver.pickle', 'rb') as f:
             return pickle.load(f)
+
+    def calculate_flow_fields(self, step: int) -> None:
+        if hasattr(self, 'Us'):
+            return
+
+        xs = self.glacier.xs.unscaled
+        angle = np.degrees(self.glacier.alpha)
+        q = [self.glacier.q.unscaled]
+
+        self.flow_field_step = step
+        self.Us = []
+        self.Vs = []
+        self.zs = []
+        for height in tqdm(self.h[::step]):
+            U, V, _, z = stationary_internal_flow_field(
+                xs=xs, h_0=height, angle=angle, production=q
+            )
+            self.Us.append(U)
+            self.Vs.append(V)
+            self.zs.append(z)
 
 
 class FiniteVolumeSolver(Solver):
