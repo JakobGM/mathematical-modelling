@@ -1,4 +1,3 @@
-import abc
 import pickle
 from typing import Optional
 from tqdm import tqdm
@@ -11,7 +10,7 @@ from glacier.flow_field import stationary_internal_flow_field
 from glacier.physics import GlacierParameters
 
 
-class Solver(abc.ABC):
+class Solver:
     CFL: float
 
     def __init__(self, glacier: GlacierParameters) -> None:
@@ -43,10 +42,6 @@ class Solver(abc.ABC):
             plt.show()
 
         return fig
-
-    @abc.abstractmethod
-    def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
-        raise NotImplementedError
 
     def save(self, name: str) -> None:
         with open(name + '_solver.pickle', 'wb') as f:
@@ -81,8 +76,6 @@ class Solver(abc.ABC):
             self.Vs.append(V_scale * V)
             self.zs.append(z_scale * z)
 
-
-class UpwindSolver(Solver):
     def solve(
         self, t_end: float, delta_t: Optional[float] = None, method=1
     ) -> None:

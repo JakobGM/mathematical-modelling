@@ -5,12 +5,12 @@ import numpy as np
 import pytest
 
 from glacier.physics import GlacierParameters
-from glacier.solvers import FiniteVolumeSolver, UpwindSolver
+from glacier.solvers import Solver
 
 
 @pytest.fixture
-def finite_volume_solver() -> FiniteVolumeSolver:
-    """Return instance of FiniteVolumeSolver."""
+def finite_volume_solver() -> Solver:
+    """Return instance of Solver."""
     initial_height = np.linspace(start=2, stop=0, num=11)
     x_coordinates = np.linspace(start=0, stop=10, num=11)
     accumulation = np.array([2, 2, 2, 2, 1, 0, -1, -2, 0, 0, 0])
@@ -20,7 +20,7 @@ def finite_volume_solver() -> FiniteVolumeSolver:
         q=accumulation,
         alpha=np.radians(3),
     )
-    return FiniteVolumeSolver(glacier)
+    return Solver(glacier)
 
 
 def test_plotting_initial_conditions():
@@ -45,7 +45,7 @@ def test_solving_with_finite_volume_method(finite_volume_solver):
         q=np.linspace(start=0, stop=0.0000000000000000000001, num=num),
         alpha=np.radians(3),
     )
-    finite_volume_solver = FiniteVolumeSolver(glacier)
+    finite_volume_solver = Solver(glacier)
     finite_volume_solver.solve(t_end=1.0, delta_t=0.0001)
     # finite_volume_solver.plot()
 
@@ -117,6 +117,6 @@ def test_generation_of_steady_state_height(glacier):
 
 
 def test_plotting_final_result_of_solver(glacier):
-    solver = UpwindSolver(glacier)
+    solver = Solver(glacier)
     solver.solve(t_end=10, method='upwind solver')
     solver.plot(show=False)

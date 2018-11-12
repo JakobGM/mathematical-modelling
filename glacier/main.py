@@ -2,7 +2,7 @@ import numpy as np
 
 from glacier.physics import GlacierParameters
 from glacier.plot import animate_glacier
-from glacier.solvers import UpwindSolver
+from glacier.solvers import Solver
 
 L = 500
 n_x = L + 1
@@ -45,10 +45,10 @@ if plot_initial:
     glacier.plot()
 
 if upwind_scheme:
-    solver = UpwindSolver(glacier=glacier)
+    solver = Solver(glacier=glacier)
     solver.solve(t_end, method="upwind")
 else:
-    solver = UpwindSolver(glacier=glacier)
+    solver = Solver(glacier=glacier)
     solver.solve(t_end, method="finite volume")
 
 animate_glacier(solver, interval=1, plot_interval=1000)
