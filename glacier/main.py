@@ -45,10 +45,10 @@ if plot_initial:
     glacier.plot()
 
 if upwind_scheme:
-    solver = Solver(glacier=glacier)
+    solver = Solver(glacier=glacier, name='upwind')
     solver.solve(t_end, method="upwind")
 else:
-    solver = Solver(glacier=glacier)
+    solver = Solver(glacier=glacier, name='finite_volume')
     solver.solve(t_end, method="finite volume")
 
 animate_glacier(solver, interval=1, plot_interval=1000)

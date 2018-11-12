@@ -14,8 +14,23 @@ from glacier.physics import GlacierParameters
 class Solver:
     CFL: float
 
-    def __init__(self, glacier: GlacierParameters) -> None:
+    def __init__(
+        self,
+        glacier: Optional[GlacierParameters] = None,
+        name: Optional[str] = None,
+    ) -> None:
+        self.name = name
         self.glacier = glacier
+
+        if self.name and self.on_disk:
+            print(
+                f'Solver "{name}" already on disk at instantiation. '
+                'Loading saved results instead!'
+            )
+            pickle = self.load()
+            self.__dict__ = pickle.__dict__
+        else:
+            assert isinstance(glacier, GlacierParameters)
 
     def plot(self, show: bool = True) -> plt.Figure:
         """
@@ -44,13 +59,18 @@ class Solver:
 
         return fig
 
-    def save(self, name: str) -> None:
-        with open(self.get_filepath(name), 'wb') as f:
+    def save(self) -> None:
+        if not self.name:
+            return
+
+        print(f'Saving solver with name "{self.name}".')
+        with open(self.get_filepath(self.name), 'wb') as f:
             pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
 
-    @classmethod
-    def load(cls, name: str) -> 'Solver':
-        with open(cls.get_filepath(name), 'rb') as f:
+    def load(self) -> 'Solver':
+        assert self.on_disk
+        print(f'Loading solver with name "{self.name}"')
+        with open(self.get_filepath(self.name), 'rb') as f:
             return pickle.load(f)
 
     @staticmethod
@@ -59,8 +79,13 @@ class Solver:
         directory.mkdir(parents=False, exist_ok=True)
         return directory / (name + '_solver.pickle')
 
+    @property
+    def on_disk(self) -> bool:
+        return self.get_filepath(self.name).exists()
+
     def calculate_flow_fields(self, step: int) -> None:
         if hasattr(self, 'Us'):
+            print('Flow field has already been calculated. Loading results!')
             return
 
         xs = self.glacier.xs.unscaled
@@ -83,9 +108,17 @@ class Solver:
             self.Vs.append(V_scale * V)
             self.zs.append(z_scale * z)
 
+        self.save()
+
     def solve(
         self, t_end: float, delta_t: Optional[float] = None, method=1
     ) -> None:
+        if hasattr(self, 'h'):
+            print(
+                'Height profile has already been calculated. Loading results!'
+            )
+            return
+
         # Scale x coordinates
         xs = self.glacier.xs.scaled
 
@@ -151,3 +184,4 @@ class Solver:
             assert np.all(h[j + 1, 1:] >= 0)
 
         self.h *= self.glacier.H
+        self.save()
