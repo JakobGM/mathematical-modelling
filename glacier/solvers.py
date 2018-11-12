@@ -82,48 +82,6 @@ class Solver(abc.ABC):
             self.zs.append(z_scale * z)
 
 
-class FiniteVolumeSolver(Solver):
-    # A very naive CFL condition, not analytically found at all
-    CFL: float = 0.1
-
-    def solve(self, t_end: float, delta_t: Optional[float] = None) -> None:
-        # Scale x coordinates
-        xs = self.glacier.xs.scaled
-
-        # Scale height coordinates
-        h_0 = self.glacier.h_0.scaled
-
-        # Spatial step used
-        delta_x = xs[1] - xs[0]
-
-        lambda_ = self.glacier.lambda_
-        m = self.glacier.m
-
-        # Determine temporal time step
-        delta_t = delta_t or 0.1 * 0.5 * delta_x / lambda_  # naive CFL
-        # delta_t = delta_t or delta_x / (kappa * 2**(m+1)) # less naive?
-
-        num_t = int(t_end / delta_t)
-        num_x = len(xs)
-
-        h = np.zeros([num_t, num_x], dtype=float)
-        h[:, 0] = h_0[0]
-        h[0, :] = h_0
-
-        q = self.glacier.q.scaled
-
-        q_trapez = (delta_t / 2) * (q[:-1] + q[1:])
-        C = lambda_ * delta_t / delta_x
-
-        for j in tqdm(np.arange(start=0, stop=num_t - 1)):
-            now = h[j]
-            future = h[j + 1]
-            flux_difference = now[1:] ** int(m + 2) - now[:1] ** int(m + 2)
-            future[1:] = now[1:] + q_trapez + C * flux_difference
-
-        self.h = h * self.glacier.H
-
-
 class UpwindSolver(Solver):
     def solve(
         self, t_end: float, delta_t: Optional[float] = None, method=1
