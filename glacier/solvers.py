@@ -1,4 +1,5 @@
 import pickle
+from pathlib import Path
 from typing import Optional
 from tqdm import tqdm
 
@@ -44,13 +45,19 @@ class Solver:
         return fig
 
     def save(self, name: str) -> None:
-        with open(name + '_solver.pickle', 'wb') as f:
+        with open(self.get_filepath(name), 'wb') as f:
             pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
 
-    @staticmethod
-    def load(name: str) -> 'Solver':
-        with open(name + '_solver.pickle', 'rb') as f:
+    @classmethod
+    def load(cls, name: str) -> 'Solver':
+        with open(cls.get_filepath(name), 'rb') as f:
             return pickle.load(f)
+
+    @staticmethod
+    def get_filepath(name: str) -> Path:
+        directory = Path(__file__).parents[1] / 'results'
+        directory.mkdir(parents=False, exist_ok=True)
+        return directory / (name + '_solver.pickle')
 
     def calculate_flow_fields(self, step: int) -> None:
         if hasattr(self, 'Us'):

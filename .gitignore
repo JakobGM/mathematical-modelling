@@ -1,3 +1,7 @@
+# Numerical results should not be commited
+results/*
+**/*.pickle
+
 # PyCharm
 .idea/
 
