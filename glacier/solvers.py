@@ -108,7 +108,10 @@ class Solver:
         num_t = int(t_end / delta_t)
         num_x = len(xs)
 
-        h = np.zeros([num_t, num_x], dtype=float)
+        # Assigning to self right away to prevent MemoryError at later
+        # assignment
+        self.h = np.zeros([num_t, num_x], dtype=float)
+        h = self.h
         h[:, 0] = h_0[0]
         h[0, :] = h_0
 
@@ -147,4 +150,4 @@ class Solver:
             assert not np.isnan(np.sum(h[j + 1, 1:]))
             assert np.all(h[j + 1, 1:] >= 0)
 
-        self.h = h * self.glacier.H
+        self.h *= self.glacier.H
