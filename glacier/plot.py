@@ -79,6 +79,12 @@ def animate_glacier(
 
     ax.legend()
 
+    global_max_speed = 0
+    for U, V in zip(solver.Us, solver.Vs):
+        max_speed = (U ** 2 + V ** 2).flatten().max()
+        if max_speed > global_max_speed:
+            global_max_speed = max_speed
+
     def init():
         return
 
@@ -103,9 +109,10 @@ def animate_glacier(
                 z,
                 U,
                 V,
-                linewidth=5 * speed / speed.flatten().max() + 1,
+                linewidth=(1000 * speed / global_max_speed).clip(
+                    min=0.3, max=4
+                ),
                 color='white',
-                density=1,
             )
             stream_artist = artists[1]
             artists[1] = new_stream_artist
