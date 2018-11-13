@@ -2,6 +2,8 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
+from matplotlib.ticker import ScalarFormatter
+
 from glacier.physics import GlacierParameters
 
 
@@ -97,7 +99,9 @@ def plot_internal_flow_field(glacier, zs, U, V):
         color=np.sqrt((np.power(U_scaled, 2) + np.power(V_scaled, 2))),
         cmap='autumn',
     )
-    fig.colorbar(strm.lines, orientation='horizontal')
+    formatter = ScalarFormatter()
+    formatter.set_powerlimits((-1, 1))
+    fig.colorbar(strm.lines, orientation='horizontal', format=formatter)
     axes[0].set_title("Flow field for stationary glacier")
 
 
