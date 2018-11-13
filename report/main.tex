@@ -3,7 +3,9 @@
 \usepackage{commath} % Gives access to differential operatior with \dif
 \usepackage{siunitx} % For SI unit specifications, nicely formatted
 \usepackage{amsmath} % For trace operator
-\usepackage{subfig} % For side - by - side figures
+\usepackage{verbatim} % for multiline comments
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 % --- Commands ---
 \newcommand{\red}[1]{\textcolor{red}{#1}}
@@ -17,6 +19,8 @@
 \firstgroupmember{755110}
 \secondgroupmember{759135}
 \thirdgroupmember{759144}
+\fourthgroupmember{757480}
+\fifthgroupmember{755478}
 
 % Add your references in BibTeX-format here. You need to run BibTeX and then pdfLaTeX before you see them in the output.
 \usepackage{filecontents}
@@ -46,12 +50,34 @@
 \begin{abstract}
     \input{abstract.tex}
 \end{abstract}
-
+%
 \section{Introduction}%Ice-sheet modelling??
 \label{sec:introduction}
 \input{introduction.tex}
+%
+\section{Method}
+\subsection{Ice Sheet Modelling}
+\input{report/ice_sheet_modelling.tex}
+%
+\subsection{Shallow Ice Approximations}
+\input{report/shallow_ice_approx.tex}
+%
+\subsection{Dynamics Of Glaciers}
+\input{report/dynamics_of_glaciers.tex}
+%
+%\input{report/theory.tex}
+%
+%\input{report/shallow_ice_approx.tex}
+%
+\section{Numerical experiments}
+\input{report/numexp.tex}
+%
+\section{Conclusion}
+\input{report/conclusion.tex}
 
 % We put all our problem answers in separate documents and import them here
+\iffalse
+\newpage
 \subsection*{Problem 1}
 \input{problems/01.tex}
 
@@ -116,6 +142,7 @@
 \section{Conclusion}
 \label{sec:conclusion}
 \input{conclusion.tex}
+\fi
 
 \bibliographystyle{siam}
 \bibliography{\jobname} 
