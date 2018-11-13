@@ -33,27 +33,75 @@ class Solver:
         else:
             assert isinstance(glacier, GlacierParameters)
 
-    def plot(self, show: bool = True) -> plt.Figure:
+    def plot(self, time_steps: int = 20, show: bool = True) -> plt.Figure:
         """
         Plot solution and initial conditions.
 
         :param show: If True, the plot will be shown.
         :return: Matplotlib Figure object containing plot(s).
         """
-        fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
-        ax1.set_title('Initial conditions')
-        ax2.set_title('Final result')
-        ax1.set_xlabel('$x$')
-        ax2.set_xlabel('$x$')
-        ax1.set_ylabel('$z$')
+        fig, ax = plt.subplots(1, 1, sharex=True, sharey=True)
+        ax.set_title('Glacier development')
+        ax.set_xlabel('$x [m]$')
+        ax.set_ylabel('$z [m]$')
+        hs = self.h
+        xs = self.glacier.xs.unscaled
+        steady_height = self.glacier.generate_steady_state_height()
 
-        ax1.fill(
-            [0, *self.glacier.xs.unscaled], [0, *self.glacier.h_0.unscaled]
+        ax.plot(
+            xs,
+            hs[0],
+            color='green',
+            label='Initial height',
+            linestyle='-',
+            alpha=0.5,
+            linewidth=5,
+            zorder=100,
+        )
+        ax.plot(
+            xs,
+            hs[-1],
+            color='red',
+            label='Final height',
+            linestyle='-',
+            alpha=0.5,
+            linewidth=5,
+            zorder=200,
+        )
+        ax.plot(
+            xs,
+            steady_height,
+            color='blue',
+            label='Steady state',
+            linestyle='-',
+            alpha=0.3,
+            linewidth=10,
+            zorder=300,
         )
         if hasattr(self, 'h'):
-            ax2.fill([0, *self.glacier.xs.unscaled], [0, *self.h[-1]])
+            steps = np.linspace(
+                stop=0, start=len(self.h) - 1, num=time_steps, dtype=int
+            )[1:]
+            for j, t in zip(steps, self.ts[steps]):
+                time_step = ax.plot(
+                    xs, self.h[j], color='gray', alpha=1, linewidth=3, zorder=1
+                )
+            time_step[0].set_label('Time steps')
 
-        ax1.legend(['Glacier'])
+        ax.legend(ncol=4)
+        ax.set_aspect('equal')
+        ax.set_ylim(0, 1.35 * hs.flatten().max())
+
+        directory = Path(__file__).parents[1] / 'plots'
+        directory.mkdir(parents=True, exist_ok=True)
+        filepath = directory / (self.name + 'time_steps')
+        fig.savefig(
+            fname=filepath,
+            bbox_inches='tight',
+            # pad_inches=0,
+            # frameon=False,
+            format='pdf',
+        )
 
         if show:
             plt.show()
@@ -130,6 +178,7 @@ class Solver:
         xs = self.glacier.xs.scaled
 
         # Scale height coordinates
+        print(self.glacier.h_0.unscaled)
         h_0 = self.glacier.h_0.scaled
 
         # Spatial step used

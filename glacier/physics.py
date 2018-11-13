@@ -92,7 +92,7 @@ class GlacierParameters:
         self.lambda_ = self.kappa / (self.m + 2)
 
         if self.q is None:
-            assert self.q_0 and self.x_s and self.x_f
+            # assert self.q_0 and self.x_s and self.x_f
             self.create_simple_accumulation_model()
         self.q = PhysicalVariable(unscaled=self.q, scaled=self.q / self.Q)
 
@@ -167,9 +167,10 @@ class GlacierParameters:
         ax2 = ax.twinx()
 
         # Set zero production from glacier toe and forwards
-        q = self.q.unscaled.copy()
-        tail_length = len(hs) - len(np.trim_zeros(hs, trim='b'))
-        q[-tail_length:] = 0
+        q = self.q.unscaled.copy() * 3600 * 24 * 365
+        print(q)
+        # tail_length = len(hs) - len(np.trim_zeros(hs, trim='b'))
+        # q[-tail_length:] = 0
 
         ax2.plot(xs, q * (3600 * 24 * 365), color='tab:red', alpha=0.7)
         ax2.set_ylabel('$q$')
