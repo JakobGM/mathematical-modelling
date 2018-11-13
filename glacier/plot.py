@@ -1,15 +1,17 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 import numpy as np
 
-from glacier.solvers import Solver
+if TYPE_CHECKING:
+    from glacier.solvers import Solver
 
 
 def animate_glacier(
-    solver: Solver,
+    solver: 'Solver',
     interval: float = 100,
     plot_interval: int = 1,
     show: bool = True,
@@ -18,7 +20,7 @@ def animate_glacier(
 ):
     glacier = solver.glacier
     xs = glacier.xs.unscaled
-    hs = solver.h[::plot_interval]
+    hs = solver.h
 
     # Create figure used for animation
     fig, ax = plt.subplots(subplot_kw={'autoscale_on': False})
@@ -70,46 +72,50 @@ def animate_glacier(
     ax.set_aspect(10)
 
     # Create line segment updated in each frame
-    filled_glacier = plt.fill_between(
+    first_glacier = plt.fill_between(
         xs, hs[0], label='current height', color='#0074D9'
     )
+    artists = [first_glacier, None]
 
     ax.legend()
-
-    if flow_field:
-        solver.calculate_flow_fields(step=plot_interval)
-        assert solver.flow_field_step == plot_interval
 
     def init():
         return
 
     def update(step, *fargs):
         frame = hs[step]
-        for artist in ax.get_children()[0 : 2 if flow_field else 1]:
-            artist.remove()
-        plt.fill_between(xs, frame, label='current height', color='#0074D9')
+        glacier_artist = artists[0]
+        artists[0] = plt.fill_between(
+            xs, frame, label='current height', color='#0074D9'
+        )
+        glacier_artist.remove()
 
-        if flow_field:
+        if flow_field and step in solver.flow_field_steps:
             # keep = lambda x: not isinstance(x, mpl.patches.FancyArrowPatch)
             ax.patches = []
-            U = solver.Us[step]
-            V = solver.Vs[step]
-            z = solver.zs[step]
+            flow_step = np.where(solver.flow_field_steps == step)[0][0]
+            U = solver.Us[flow_step]
+            V = solver.Vs[flow_step]
+            z = solver.zs[flow_step]
             speed = np.sqrt(U * U + V * V)
-            ax.streamplot(
+            new_stream_artist = ax.streamplot(
                 xs,
                 z,
                 U,
                 V,
-                linewidth=2 * speed / speed.max() + 1,
+                linewidth=5 * speed / speed.flatten().max() + 1,
                 color='white',
                 density=1,
             )
+            stream_artist = artists[1]
+            artists[1] = new_stream_artist
+            if stream_artist:
+                stream_artist.lines.remove()
 
     animation = FuncAnimation(
         fig=fig,
         func=update,
-        frames=len(hs),
+        frames=np.arange(start=0, stop=len(hs), step=plot_interval),
         init_func=init,
         blit=False,
         interval=interval,
@@ -120,6 +126,8 @@ def animate_glacier(
         plt.show()
 
     if save_to:
-        animation.save(save_to + '.gif', dpi=80, writer='imagemagick')
+        filename = save_to + '.gif'
+        print(f'Saving animation to "{filename}"')
+        animation.save(filename, dpi=80, writer='imagemagick')
 
     return fig
