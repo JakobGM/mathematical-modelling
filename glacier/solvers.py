@@ -173,6 +173,7 @@ class Solver:
         past = h_0
         for j in tqdm(np.arange(start=1, stop=num_t)):
             future = np.zeros_like(past)
+            future[0] = h_0[0]
             # No melting where there is no ice
             no_ice_indices = past == 0
             this_q = q.copy()
