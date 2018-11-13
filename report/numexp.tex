@@ -1,5 +1,5 @@
 \textbf{CFL-condition}:
-For an explicit scheme for the differential equation $\partial h/\partial t + \lambda \partial h/ \partial x = 0$ the CFL-condition will be $C = \left | \lambda \frac{\Delta t}{\Delta x}\right| < 1$ \cite{???}.
+For an explicit scheme for the differential equation $\partial h/\partial t + \lambda \partial h/ \partial x = 0$ the CFL-condition is $C = \left | \lambda \frac{\Delta t}{\Delta x}\right| < 1$.
 %
 However, we want to simulate the behaviour of \eqref{eq:rescaled_conservation_of_matter}, which can be written as
 %
@@ -9,8 +9,30 @@ However, we want to simulate the behaviour of \eqref{eq:rescaled_conservation_of
 %
 If we assume that $q$ is sufficiently small, thus locally constant, this term can be neglected. Since this equation is scaled, a likely bound for the maximum value of the height $h_{\text{max}} < 2$, so the CFL-condition becomes:
 \begin{equation*}
-    C = \left | \lambda (m+2) \text{max}^{m+1} \frac{\Delta t}{\Delta x}\right| =\left | \kappa h_{\text{max}}^{m+1} \frac{\Delta t}{\Delta x}\right| < \left | \kappa 2^{m+1} \frac{\Delta t}{\Delta x}\right| < 1
+    C = \left | \lambda (m+2) h_\text{max}^{m+1} \frac{\Delta t}{\Delta x}\right| =\left | \kappa h_{\text{max}}^{m+1} \frac{\Delta t}{\Delta x}\right| < \left | \kappa 2^{m+1} \frac{\Delta t}{\Delta x}\right| < 1
 \end{equation*}
+%
+\textbf{Numerical Schemes:}\\
+The following schemes were applied for the numerical implementation.
+%
+Finite volume:
+%
+\begin{align} \label{eq:finite_volume_scheme}
+    \begin{split}
+        & h_i^{j+1} \approx h_i^{j} + \frac{\Delta t}{2} \left (q_i^j + q_{i+1}^j \right) + \frac{\lambda \Delta t}{\Delta x} \left( \left [h_i^j\right]^{m+2} - \left[h_{i+1}^j\right]^{m+2}\right) \\
+    \end{split}
+\end{align}
+%
+Upwind scheme:
+%
+\begin{align} \label{eq:upwind_scheme}
+\begin{split}
+    & h_i^{j+1} \approx h_i^j + \frac{\Delta x}{\Delta t} \left( \Delta x q_i - \kappa \left( h_i^j \right)^{m+1} \left (h_{i}^j - h_{i-1}^j \right) \right)
+    \end{split}
+\end{align}
+%
+%%%%%%%%%%%%%%%% BEGIN COMMENT %%%%%%%%%%%%%%%%%%%%
+\begin{comment}
 A simplified model for q will be used
 
 \begin{verbatim}
@@ -27,10 +49,13 @@ q_0  |___________________________
      |                                  \
 \end{verbatim}
 
+
+
 The toe of the glacier remains t be solved for.
 %
 Now apply the finite volume method for this problem. Sub-divide the x-domain of interest $[0,L]$
 %
+
 \begin{align*}
  \begin{split}
      0 &= x_1 < x_2 < \dots < x_n = L\\
@@ -183,3 +208,28 @@ $\dots$
       -\lambda h(0)^{m+2}&= q_0 x_F + \frac{1}{2} \alpha (x_F - x_S)^2  \\
     \alpha &= \frac{-2 \left(q_0 x_F + \lambda h(0)^{m+2}\right)}{(x_F - x_S)^2}
 \end{align*}
+\end{comment}
+%%%%%%%%%%%% END COMMENT %%%%%%%%%%%%%%%%
+
+The explicit expressions for the flow field are shown in \eqref{eq:explicit_u_h} and \eqref{eq:explicit_v_h}. The flow field within the glacier can be computed by evaluating these equations on grid points within the glacier. The derivative in \eqref{eq:explicit_v_h} is approximated using central differences. Forward and backwards differences are used on the boundaries of the grid.
+
+The stationary glacier for a given accumulation rate is found using the method described in \red{reference to relevant section or equation}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{report/images/flow_field_linear_production.png}
+        \caption{Accumulation rate as specified in \red{a}}
+        \label{fig:linear}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{report/images/flow_field_arbitrary_production.png}
+        \caption{Arbitrary accumulation rate}
+        \label{fig:arbitrary}
+    \end{subfigure}
+    \caption{Stationary glaciers with height on left axis, accumulation rate on right axis and stream lines for the internal flow field}\label{fig:animals}
+\end{figure}
+
+The flow field for the production rate $q(x) = 5\sin(\frac{x}{25})\frac{1}{2(x + 1)} - 0.01$ is shown in figure \ref{fig:arbitrary}.
+
+The flow field for a production rate as shown in \red{Description of accumulation rate} is shown in figure \ref{fig:linear}.

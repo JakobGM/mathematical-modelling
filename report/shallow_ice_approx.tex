@@ -1,3 +1,5 @@
+%---------------------Gammel Intro ------------------
+\begin{comment}
 In this section, we will take into account the specific geometry of a glacier.  We will do so by rescaling the equations in an appropriate way and identifying (and later ignoring) small terms, using as a main basis the fact that the length $L$ of a glacier is typically much larger than its height $H$. We therefore choose the scales
 %
 \begin{equation*}
@@ -15,3 +17,91 @@ We scale the height with the same scale $H$;
 \begin{equation*}
     h^* = Hh.
 \end{equation*}
+\end{comment}
+%-------------------------------------------------------
+In this section, we will take into account the specific geometry of a glacier.  We will do so by rescaling the equations in an appropriate way and identifying small terms, using as a main basis the fact that the length $L$ of a glacier is typically much larger than its height $H$. We therefore choose the scales
+%
+\begin{equation*}
+    x^* = Lx \quad \text{and} \quad z^*=Hz
+\end{equation*}
+%
+and try to make use of the fact that $\epsilon \coloneqq H/L \ll 1$.
+%
+We scale the height with the same scale $H$;
+%
+\begin{equation*}
+    h^* = Hh.
+\end{equation*}
+% ------------------------------PROBLEMS-------------------------------------
+To find suitable scales $V$, $U$ and $T$ for the velocities and the time, such that
+%
+\begin{equation*}
+    u^* = Uu, \quad v^* = Vv \quad \text{and} \quad t^* = Tt,
+\end{equation*}
+%
+we balance the terms in the equations for conservation of matter. Using these scales, and rewriting~\eqref{eq:velocity-divergence} suggests that $\frac{U}{L} = \frac{V}{H}$. Next we insert $q^* = Q$ into~\eqref{eq:conservation_of_matter} and rewrite as
+\begin{equation*}
+    \frac{H}{T} \pd{h}{t} + H \frac{U}{L} \od{}{x} \int_0^h u \dif{z} = Qq.
+\end{equation*}
+%
+To balance the equations we set $T = \frac{H}{Q}$, $U = \frac{QL}{H}$ and $V = Q$, so~\eqref{eq:conservation_of_matter} becomes
+%
+\begin{equation}
+    \pd{h}{t} + \od{}{x} \int_0^h u \dif{z} = q.
+    \label{eq:conservation_of_matter_rescaled}
+\end{equation}
+%
+%Problem 7
+We now use the scales
+%
+\begin{equation*}
+    \Theta = \Theta_{xz} = \rho g H \, \sin (\alpha) \quad \text{and} \quad \Theta_{xx} = P = \frac{H}{L} \Theta = \epsilon \Theta
+\end{equation*}
+%
+for the stresses $\theta^*$, $\tau_{xz}^*$ and $\tau_{xx}^*$ and the pressure $\tilde{p}^*$, balancing the other equations in our system. Rescaling the equations~\eqref{eq:velocity-divergence},  \eqref{eq:Glens_law}, \eqref{eq:theta_adjusted} and \eqref{eq:steady-state-explicit-divergence}, we obtain
+%
+\begin{subequations}
+\begin{align}
+    \partial_x u + \partial_z v &= 0, \label{eq:interior_equations_rescaled1}\\
+    \frac{\Theta}{L} \epsilon \partial_x \tau_{xx} + \frac{\Theta}{H} \partial_z \tau_{xz} + \rho g \sin(\alpha) - \rho g \cos(\alpha) \, \epsilon \partial_x h - \frac{\Theta}{L} \epsilon \partial_x \tilde{p} &= 0, \label{eq:interior_equations_rescaled2}\\
+    \partial_x \tau_{xz} - \partial_z \tau_{xx} - \partial_z \tilde{p} &= 0, \label{eq:interior_equations_rescaled3}\\
+    \frac{Q}{H} \partial_x u &= \mu \Theta^m \epsilon \theta^{m-1} \tau_{xx}, \label{eq:interior_equations_rescaled4}\\
+    \frac{1}{2}(\frac{Q}{H} \frac{1}{\epsilon} \partial_z u + \frac{Q}{L} \partial_x v) &= \mu \Theta^m \theta^{m-1} \tau_{xz}, \label{eq:interior_equations_rescaled5}\\
+    \theta &= \left( \epsilon^2 \tau_{xx}^2 + \tau_{xz}^2 \right)^{1/2}. \label{eq:interior_equations_rescaled6}
+\end{align}
+\label{eq:interior_equations_rescaled}
+\end{subequations}
+%
+Performing a first order asymptotic on equation~\eqref{eq:interior_equations_rescaled2} we obtain $\Theta \partial_z \tau_{xz} \approx - \rho g H \sin(\alpha) = - \Theta \Rightarrow \partial_z \tau_{xz} \approx -1$. Equation~\eqref{eq:interior_equations_rescaled6} gives $\theta \approx |\tau_{xz}|$. With this we obtain from equation~\eqref{eq:interior_equations_rescaled5} $\partial_z u \approx \partial_z u + \epsilon^2 \partial_x v = \kappa |\tau_{xz}|^{m-1} \tau_{xz}$, where $\kappa = 2H \mu \Theta^m \epsilon / Q$. A first order expansion of equation~\eqref{eq:interior_equations_rescaled4} simply gives $\partial_x u = 0$.
+%
+%Problem 8
+Using that $\partial_{z}\tau_{xz} = -1$ and $\tau_{xz}(h) = 0$ we get that $\tau_{xz} = -z + h$. By inserting this into the approximation for $\partial_{z}u$, and using that $z \in \left[0, h\right]$ we get that $\partial_{z}u = \kappa(-z + h)^{m}$. Let $d(x)$ denote the height profile of the boundary, such that $0<d(x)<h(x,t)$, so when integrating and combining this with $u(x, d(x), t) = 0$ leaves us with 
+\begin{equation} \label{eq:explicit_u_h}
+u = \frac{\kappa}{m+1}\left( (h-d(x))^{m+1} - (h-z)^{m+1} \right)
+\end{equation}
+Inserting this expression for $u$ into equation~\eqref{eq:conservation_of_matter_rescaled} and performing the integration, leaves us with
+%
+\begin{equation}\label{eq:rescaled_conservation_of_matter}
+    \pd{{h}}{{t}} + \lambda \od{}{{x}}\left(h-d(x)\right)^{m+2} = q,
+\end{equation}
+%
+where $\lambda = \frac{\kappa}{m+2}$.
+%
+We have the boundary condition $h(x,0) = h_0$.
+%
+%Problem 9
+Inserting~\eqref{eq:explicit_u_h} into equation ~\eqref{eq:interior_equations_rescaled1}, integrating with respect to $z$ and using the boundary condition $v(x,d(x),t) = 0$ results in
+%
+\begin{equation}
+    v = - \pd{}{x} \frac{\kappa}{m+1} \left[ (z-d(x))(h-d(x))^{m+1} + \frac{1}{m+2} \left( [h-z]^{m+2} - (h-d(x))^{m+2} \right) \right].
+    \label{eq:explicit_v_h}
+\end{equation}
+%
+%Problem 11
+In the previous asymptotic expansions of equations~\eqref{eq:interior_equations_rescaled} we did not treat $\alpha$ as a small parameter in the same way as $\epsilon$. If we assume $\gamma = \epsilon \cot(\alpha) \sim 1$, and that \red{$d(x) \equiv 0 $}, we still obtain a relatively simple PDE for $h$.
+%
+With the new assumption about $\alpha$, first order asymptotic expansion of equation~\eqref{eq:interior_equations_rescaled1} gives $\partial_z \tau_{xz} = - \partial_x h$. Thus $\tau_{xz} = h_x (h-z)$, $u = \frac{\kappa}{m+1} h_x^m \left[ h^{m+1} - (h-z)^{m+1} \right]$, and finally we arrive at \textcolor{red}{(assuming what we assume in Problem 8, and maybe from here on out that $d(x) \equiv 0$, or what happens if we don't assume this.)}
+%
+\begin{equation}
+    \pd{h}{t} + \lambda \od{}{x} \left(h_x^m \, \red{(}h\red{-d(x))}^{m+2}\right) = q.
+\end{equation}

@@ -69,6 +69,9 @@
 \newcommand{\firstgroupmember}[1]{\def\firstgroupmember{#1}}
 \newcommand{\secondgroupmember}[1]{\def\secondgroupmember{#1}}
 \newcommand{\thirdgroupmember}[1]{\def\thirdgroupmember{#1}}
+\newcommand{\fourthgroupmember}[1]{\def\fourthgroupmember{#1}}
+\newcommand{\fifthgroupmember}[1]{\def\fifthgroupmember{#1}}
+
 
 \def\logofil{ntnulogosort}
 \def\Vhrulefill{\leavevmode\leaders\hrule height 0.7ex depth \dimexpr0.4pt-0.7ex\hfill\kern0pt}
@@ -98,6 +101,8 @@
 \item\firstgroupmember%
 \ifdefempty{\secondgroupmember}{}{\item\secondgroupmember}%
 \ifdefempty{\thirdgroupmember}{}{\item\thirdgroupmember}%
+\ifdefempty{\fourthgroupmember}{}{\item\fourthgroupmember}%
+\ifdefempty{\fifthgroupmember}{}{\item\fifthgroupmember}%
 \end{itemize}%
     \end{minipage}\par\vspace{.7em}%
  \noindent\textcolor{thesismain}{\Vhrulefill}%
@@ -109,8 +114,8 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Style: Sections and header/footer
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Style: Sections and header/footer
 
 \PassOptionsToPackage{explicit,pagestyles}{titlesec}
 \RequirePackage{titlesec}
@@ -119,6 +124,12 @@
 {\color{Black}\bfseries\large\scshape\filcenter}
 {}{0pt}{\textcolor{thesissectionlines}{\noindent\Vhrulefill}\hspace{1em}\hspace{0.5em}#1\hspace{1em}\textcolor{thesissectionlines}{\Vhrulefill}}
 \titlespacing*{\section}
+{0em}{2em}{0.5em}
+
+\titleformat{\subsection}
+{\color{Black}\bfseries\large\scshape\filcenter}
+{}{0pt}{\textcolor{thesissectionlines}{\noindent}\hspace{1em}\hspace{0.5em}#1\hspace{1em}\textcolor{thesissectionlines}}
+\titlespacing*{\subsection}
 {0em}{2em}{0.5em}
 
 \usepackage{fancyhdr}

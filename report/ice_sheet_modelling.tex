@@ -1,0 +1,136 @@
+The Eulerian formulation of the law of conservation of mass is given by
+%
+\begin{equation}
+  \eval{\od{}{t} \int_{R_0} \rho(x, t) \dif{x}}_{t = t_0} + \int_{\partial R_0} \rho(x, t_0) (\vec{w}^* \cdot \vec{n}) \dif{\sigma} = \int_{R_0} q^*(x, t_0) \dif{x},
+  \label{eq:conservation_of_matter_integral}
+\end{equation}
+%
+where $R_0$ is a given domain and $\partial R_0$ its boundary. The outer unit normal vector of the domain boundary surface is given by $\vec{n}$, while $q^*$ is the matter production within the domain and $\rho$ denotes the density.
+%
+The differential form of this equation is
+%
+\begin{equation}
+  \pd{}{t} \rho + \nabla \cdot (\rho \vec{w}^*) = q^*.
+  \label{eq:conservation_of_matter_interior}
+\end{equation}
+%
+Assuming constant density $\rho$ results in $\pd{\rho}{t} = 0$ and $\nabla \cdot (\rho \vec{w}^*) = \rho \nabla \cdot \vec{w}^*$. By also assuming no internal production, $q^* = 0$, one arrives at
+%
+\begin{equation} \label{eq:velocity-divergence}
+  \nabla \cdot \vec{w}^* = 0.
+\end{equation}
+%
+Conservation of momentum and Newton's second law of motion implies that the velocity of the glacier must satisfy
+%
+\begin{equation} \label{eq:momentum-conservation}
+  \begin{cases}
+    &\rho \partial_{t^*} u^* + \rho \nabla u^* \cdot \vec{w}^* = -\partial_{x^*} p^* + \nabla \cdot \tau_x^* + f_x, \\
+    &\rho \partial_{t^*} v^* + \rho \nabla  v^* \cdot \vec{w}^* = -\partial_{z^*} p^* + \nabla \cdot \tau_z^* + f_z,
+  \end{cases}
+\end{equation}
+%
+here, $f = (f_x, f_y)$ denotes the body forces on each point, $p^*$ the pressure, and
+%
+\begin{equation} \label{eq:stress_tensor}
+  \tau^* = \begin{bmatrix} \tau_x^* \\ \tau_z^* \end{bmatrix} = \begin{bmatrix} \tau_{xx}^* & \tau_{xz}^* \\ \tau_{zx}^* & \tau_{zz}^* \end{bmatrix}
+\end{equation}
+%
+the stress tensor in two dimensions. The pressure $p^*$ can be written as a sum
+%
+\begin{equation} \label{eq:pressure}
+  p^*(x^*, z^*, t^*) = \rho g \cos(\alpha) \cdot (h^*(x^*, t^*) - z^*) + \tilde{p}^*(x^*, z^*, t^*)
+\end{equation}
+%
+with $g$ being the gravitational acceleration at the surface of the earth ($\approx \SI{9.8}{\meter\per\square\second}$). The first term in~\eqref{eq:pressure} is the hydrostatic pressure within the glacier, and the second term is the counterpressure induced by the constant density $\rho$.
+%
+We will now model the body forces within the glacier. First observe that the two first terms of the left hand side of equation~\eqref{eq:momentum-conservation} are the time and space derivatives of momentum.
+We can make a simplification by assuming that gravity and friction changes are much greater than momentum and pressure changes, resulting in a steady state. These two terms can therefore be approximated to $0$. The pointwise gravitational force $\vec{f_g}$ is given by
+%
+\begin{equation}
+  \vec{f_g} = \begin{bmatrix} f_{gx} \\ f_{gz} \end{bmatrix} = \begin{bmatrix} \rho g \sin(\alpha) \\ \rho g \cos(\alpha) \end{bmatrix}.
+\end{equation}
+%
+Under the assumption that the dominating body force is $f_g$, equation~\eqref{eq:momentum-conservation} is simplified  to:
+%
+\begin{equation} \label{eq:steady-state-implicit}
+  \begin{cases}
+    &-\partial_{x^*} p^* + \nabla \cdot \tau_x^* + \rho g \sin(\alpha) = 0, \\
+    &-\partial_{z^*} p^* + \nabla \cdot \tau_z^* + \rho g \cos(\alpha) = 0,
+  \end{cases}
+\end{equation}
+%
+The space derivatives of the pressure sum given in equation~\eqref{eq:pressure} can be inserted into equation~\eqref{eq:steady-state-implicit}, which yields
+%
+\begin{equation} \label{eq:steady-state-explicit}
+  \begin{split}
+    \nabla \cdot \tau_x^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
+    \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0.
+  \end{split}
+\end{equation}
+%
+We will now develop a model for the stress tensor $\tau^*$, with the (common) assumption that the stress tensor is related to the strain rate by the following relations (\textit{Glen's law}):
+%
+\begin{equation}
+  \begin{split} \label{eq:Glens_law}
+    \partial_{x^*} u^* &= \mu(\theta^*)^{m-1} \tau_{xx}^*, \\
+    \partial_{z^*} v^* &= \mu(\theta^*)^{m-1} \tau_{zz}^*, \\
+    \frac{1}{2}(\partial_{z^*} u^* + \partial_{x^*} v^*) &= \mu(\theta^*)^{m-1} \tau_{xz}^* = \mu(\theta^*)^{m-1} \tau_{zx}^*.
+  \end{split}
+\end{equation}
+%
+Here,
+%
+\begin{equation} \label{eq:theta}
+  \theta^* := \left( \frac{1}{2} {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 + \frac{1}{2} {\tau_{zz}^*}^2 \right) ^{1/2},
+\end{equation}
+%
+where $\mu$ and $m$ are material constants depending on, amongst others, the temperature of the ice. Common values for the exponent $m \in \left[1.8\hspace{0.2em},\enspace5\right]$, with $m = 3$ being a typical choice.
+%
+Conservation of angular momentum and the assumption of incompressibility gives
+%
+\begin{subequations}
+    \begin{align}
+        \Tr(\tau) &= \tau_{xx} + \tau_{zz} = 0 \label{eq:incompressible-tensor} \\
+        \tau_{xz} &= \tau_{zx}, \label{eq:non-rotational-tensor}
+    \end{align}
+\end{subequations}
+%
+which inserted into equation~\eqref{eq:theta} yields:
+%
+\begin{equation} \label{eq:theta_adjusted}
+  \theta^* := \left( {\tau_{xx}^*}^2 + {\tau_{xz}^*}^2 \right) ^{1/2}.
+\end{equation}
+%
+If we find the divergence of the stress tensor and apply these assumptions. Insertion into \eqref{eq:steady-state-explicit} yields
+%
+\begin{equation}
+  \begin{split} \label{eq:steady-state-explicit-divergence}
+    \partial_{x^*} \tau_{xx}^* + \partial_{z^*} \tau_{xz}^* + \rho g \sin(\alpha) - \rho g \cos(\alpha) \cdot \partial_{x^*} h^* - \partial_{x^*} \tilde{p}^* &= 0, \\
+    \partial_{x^*} \tau_{xz}^* - \partial_{z^*} \tau_{xx}^* - \partial_{z^*} \tilde{p}^* &= 0.
+  \end{split}
+\end{equation}
+% \label{eq:interior_equations}
+After all these simplifications, we end up with the remaining unknowns $u^*$, $v^*$, $h^*$, $\tilde{p}^*$, $\tau_{xx}^*$, and $\theta^*$. At the surface, $z^* = h^*(x^*,t^*)$, the force from the atmospheric pressure is still accounted for by $\Tilde{p}^*$ and let us assume that the sheer stress between the glacier and the atmosphere is negligible. Then $\dif{\boldsymbol{F}} = \boldsymbol{T} \cdot \boldsymbol{\hat{n}} \dif{\sigma} = 0 \Rightarrow \tau_{xx}\hat{n}_x + \tau_{xz}\hat{n}_z = 0 $, and $\tau_{zz}\hat{n}_x + \tau_{zx}\hat{n}_z = 0$, and by \eqref{eq:non-rotational-tensor} and \eqref{eq:incompressible-tensor}, $(\tau_{xx} - \tau_{xx})\hat{n}_x + 2\tau_{xz}\hat{n}_z = 0$, which gives $ \tau_{xz} = 0 $. At the bottom, $z^* = 0$, we simplify the problem by assuming that the glacier is completely frozen all the way to the bed, resulting in $u^*, v^*\enspace|_{z^*=0}= 0$. 
+%
+%Problem 6
+
+In order to find an expression for the surface, let the accumulation of ice, in length pr. unit time, be denoted by $q^*(x^*, t^*)$. The density is given as mass pr. unit area and is constant throughout the glacier. Let R be a control area extending over the interval $\left[x^*, x^* + \epsilon\right]$, from the bottom of the glacier to the surface. By applying conservation of matter \eqref{eq:conservation_of_matter_integral} within $R$ and noting that there is only movement across the boundary at points where the normal vector of $R$ points in or opposite of $x$-direction, the term $(\vec{w^*}\cdot\vec{n})$ is reduced to $u^*(x^*, t^*)$, and the equation can therefore be rewritten as
+%
+\begin{align}
+\begin{split}\label{eq:conservation_52}
+    &\od{}{t}\int_{x^*}^{x^* + \epsilon}h^*(x^*, t^*)\ \dif x \\ &+ \left[\int_0^{h^*(x^* + \epsilon, t^*)}u^*(x^* + \epsilon, z^*, t^*)\ \dif{z^*} - \int_0^{h^*(x^*, t^*)}u^*(x^*, z^*, t^*)\ \dif{z^*}\right] \\ 
+    &= \int_{x^*}^{x* + \epsilon}q^*(x^*, t^*)\ \dif x
+\end{split}
+\end{align}
+% Hmmmmm
+Note that the second term in~\eqref{eq:conservation_52} can be written as $f(x^* + \epsilon) - f(x^*)$, where $f(x^*) = \int_0^{h^*(x^*, t^*)}u^*(x^*, z^*, t^*)\ \mathrm{d}z^*$. Dividing by $\epsilon$ and letting $\epsilon \to 0$ gives us the definition of the derivative, and let us rewrite the term as $\od{}{{x^*}} \int_0^{h^*(x^*, t^*)} u^*(x^*, z^*, t^*)\  \dif{z^*} $.
+%
+The first term can be rewritten as $\od{}{t}\left[H^*(x^* + \epsilon, t^*) - H^*(x^*, t^*)\right]$, where $H^*(x^*, t^*)$ is the anti-derivative of $h^*(x^*, t^*)$. Dividing by $\epsilon$ and letting $\epsilon \to 0$ produces the derivative of $H^*(x^*, t^*)$, resulting in $\od{}{t}h^*(x^*, t^*)$. The same technique can be used for the third term.
+% Hmmmmm slutt
+By using the results above we get the following equation when dividing the whole equation by $\epsilon$ and letting $\epsilon \to 0$.
+%
+\begin{equation}\label{eq:conservation_of_matter}
+    \pd{{h^*}}{{t^*}} + \od{}{{x^*}}\int_0^{h^*(x^*, t^*)} u^* (x^*, z^*, t^*) \dif{z^*} = q^*(x^*, t^*)
+\end{equation}
+%
+Notice that if we assume a constant height profile $d(x) \equiv 0$, this will only change the limits and initial conditions when integrating over the height, and not the dynamics inside the glacier fundamentally.

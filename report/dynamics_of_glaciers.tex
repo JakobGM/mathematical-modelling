@@ -1,0 +1,21 @@
+A steady state is identified by setting $\pd{h}{t} = 0$. Combining this with our expression from $\eqref{eq:rescaled_conservation_of_matter}$ leaves us with $ \od{}{x}h^{m+2} = \frac{q}{\lambda}$. Integrating and solving for $h$ leaves us with the following equation for identifying steady states.
+%
+\begin{equation}
+    h = \left(\frac{{\int}q(x)\,\dif{x}}{\lambda}\right)^{\frac{1}{m+2}} + \red{d(x)}
+\end{equation}
+%
+The toe of a glacier in a steady state can be found by setting $h(x) \red{-d(x)} = 0$ and taking the smallest value for which this holds. The toe, $x_F$ can be written as 
+%
+\begin{equation}
+    x_F = \min\left\{x \colon {\int}q(x)\,\dif{x} = 0\right\}
+\end{equation}
+%
+\textcolor{red}{What are reasonable boundary conditions? - $h(x, t) = h_0(x)$, $h_0(x_f) = 0$, more?}
+% Problem 13
+Starting with a steady state $h_0 = h_0(x)$ for some accumulation rate $q = q(x)$, i.e. $\partial_t h = 0$, we have from equation~\eqref{eq:rescaled_conservation_of_matter} that $\lambda \partial_x h_0^{m+2} = q$. We now assume a small perturbation $h_\delta = h_0 + \delta k$ where $\delta > 0$ is a small parameter. Inserting into equation~\eqref{eq:rescaled_conservation_of_matter}, performing a Taylor expansion of $h_\delta^{m+2}$ around $h_0$ gives and ignoring $o(\delta)$ terms, gives
+%
+\begin{equation}
+    \partial_t k = - \kappa k \od{}{x} h_0^{m+1} = - \kappa k (m+1) h_0^m \od{}{x} h_0.
+\end{equation}
+%
+with $\kappa (m+1) h_0^m > 0$, so $h(x)$ will return to the steady state for $x$ where $\od{h_0}{x} > 0$, i.e. the steady states are asymptotically stable for $x$ where the slope of $h$ is positive. They are unstable for $x$ where the slope is negative and stable, but not asymptotically, for $x$ where the slope is zero (since $\partial_t k = 0$). The slope has to be negative from some point to the toe, so that part will always react to this kind of perturbations.
