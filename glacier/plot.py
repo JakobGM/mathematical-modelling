@@ -79,11 +79,12 @@ def animate_glacier(
 
     ax.legend()
 
-    global_max_speed = 0
-    for U, V in zip(solver.Us, solver.Vs):
-        max_speed = (U ** 2 + V ** 2).flatten().max()
-        if max_speed > global_max_speed:
-            global_max_speed = max_speed
+    if flow_field:
+        global_max_speed = 0
+        for U, V in zip(solver.Us, solver.Vs):
+            max_speed = (U ** 2 + V ** 2).flatten().max()
+            if max_speed > global_max_speed:
+                global_max_speed = max_speed
 
     def init():
         return
