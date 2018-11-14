@@ -47,6 +47,11 @@ class Solver:
         hs = self.h
         xs = self.glacier.xs.unscaled
         steady_height = self.glacier.generate_steady_state_height()
+        delta_t = self.ts[time_steps] - self.ts[0]
+
+        description = f'$h_0 = {hs[0, 0]:.0f}$ $[m]$'
+        q_0 = self.glacier.q.unscaled[0] * 3600 * 24 * 365
+        description += f', $q_0 = {q_0:.0f}$ $[m/year]$'
 
         ax.plot(
             xs,
@@ -86,15 +91,18 @@ class Solver:
                 time_step = ax.plot(
                     xs, self.h[j], color='gray', alpha=1, linewidth=3, zorder=1
                 )
-            time_step[0].set_label('Time steps')
+            time_step[0].set_label(
+                f'Time steps, $\Delta t = {delta_t:.0f}$ $[s]$'
+            )
 
-        ax.legend(ncol=4)
+        ax.plot([], [], alpha=0, label=description)
         ax.set_aspect('equal')
-        ax.set_ylim(0, 1.35 * hs.flatten().max())
+        ax.legend(ncol=5)
+        ax.set_ylim(0, 1.5 * hs.flatten().max())
 
         directory = Path(__file__).parents[1] / 'plots'
         directory.mkdir(parents=True, exist_ok=True)
-        filepath = directory / (self.name + 'time_steps')
+        filepath = directory / (self.name + 'time_steps.pdf')
         fig.savefig(
             fname=filepath,
             bbox_inches='tight',

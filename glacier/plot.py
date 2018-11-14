@@ -24,9 +24,10 @@ def animate_glacier(
 
     # Create figure used for animation
     fig, ax = plt.subplots(subplot_kw={'autoscale_on': False})
+    height_addition = 2.5
     ax.set_title('Glacier Animation')
     ax.set_xlim(xs.min(), xs.max())
-    ax.set_ylim(hs.min(), 1.4 * hs.max())
+    ax.set_ylim(hs.min(), height_addition * hs.max())
 
     # Plot initial height
     ax.plot(
@@ -44,9 +45,10 @@ def animate_glacier(
         xs,
         steady_height,
         alpha=0.5,
-        color='green',
+        color='white',
         linestyle='--',
         label='steady state height',
+        zorder=1000,
     )
 
     # Plot accumulation rate
@@ -60,16 +62,17 @@ def animate_glacier(
 
     # Negate q in order to get proper coolwarm colorscheme
     background = [-q]
-    ax.imshow(
+    image = ax.imshow(
         background,
         aspect='auto',
         vmin=-1,
         vmax=1,
-        extent=[xs.min(), xs.max(), hs.min(), 2 * hs.max()],
+        extent=[xs.min(), xs.max(), hs.min(), height_addition * hs.max()],
         alpha=0.4,
         cmap='coolwarm',
     )
-    ax.set_aspect(10)
+    fig.colorbar(image, orientation='horizontal')
+    ax.set_aspect(1)
 
     # Create line segment updated in each frame
     first_glacier = plt.fill_between(
@@ -134,7 +137,7 @@ def animate_glacier(
         plt.show()
 
     if save_to:
-        filename = save_to + '.gif'
+        filename = save_to + '.mp4'
         print(f'Saving animation to "{filename}"')
         animation.save(filename, dpi=80, writer='imagemagick')
 
